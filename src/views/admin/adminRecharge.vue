@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <Loading v-if="loading" />
+  <div v-else class="wrapper">
     <div @click="manageRearge">
       添加
     </div>
@@ -7,28 +8,44 @@
       <van-dropdown-item @change="settleChange" v-model="settleCalue" :options="settleOption" :key="1" />
       <van-dropdown-item @change="carChange" v-model="carValue" :options="carsOption" :key="2"  />
     </van-dropdown-menu>
-      <van-cell-group>
-    <van-cell 
-      v-for="(rechargeItem, rechargeIndex) in rechargesList"
-      :key="rechargeIndex"
-      :title="rechargeItem.name"
+    
+    <div class="form-date" @click="toggleDate">
+      222   
+    </div>
+    <van-list
+      v-model="rechargeLoading"
+      :finished="rechargeFinished"
+      @load="onLoad"
+      class="container"
     >
-      {{rechargeItem.chargeLnum}}
-      {{rechargeItem.settleName}}
-      {{timeFormat(rechargeItem.createdAt)}}
-      <div @click="editReachrgeItemById(rechargeItem._id)">
-        编辑
-      </div>
-      <div @click="delRechargeItemById(rechargeItem._id)">
-        删除
-      </div>
-    </van-cell>
-  </van-cell-group>
-  <div>
+      <van-swipe-cell  
+        v-for="(rechargeItem, rechargeIndex) in rechargesList"
+        :key="rechargeIndex"
+      >
+        <van-cell :title="rechargeItem.name " :value="rechargeItem.chargeLnum" :label="timeFormat(rechargeItem.createdAt)"/>
+        <template #right>
+          <van-button square type="danger" text="删除" @click="editReachrgeItemById(rechargeItem)" />
+          <van-button square type="primary" text="编辑" @click="delRechargeItemById(rechargeItem._id)" />
+        </template>
+      </van-swipe-cell>
+
+      <template #finished>
+        没有更多了, <span @click="addUser" class="add-user">点击这里充值</span>
+      </template>
+    </van-list>
+  <!-- <div>
     <p>总 {{totalTunnage}} 吨数</p>
     <p>总 {{totalLnum}} 升数</p>
     <p>总应还代加费金额: {{shouldRepayAmount}} 元</p>
-  </div>
+  </div> -->
+  <van-datetime-picker
+    v-if="isShowDate"
+    v-model="currentDate"
+    type="year-month"
+    title="选择年月日"
+    :min-date="minDate"
+    :max-date="maxDate"
+  />
   </div>
 </template>
 
@@ -40,19 +57,45 @@ import { getAllRechargesList, delRechargeItemById } from '@/api/recharges'
 import dayjs from 'dayjs';
 import { getAllCarsList } from '@/api/cars';
 import { BigNumber } from 'bignumber.js';
+import Loading from '@/components/loading.vue';
 
-@Component
+@Component({
+  components: {
+    Loading,
+  }
+})
 export default class AdminRecharge extends Vue {
+
+  private loading: boolean = true;
+
+  private isShowDate: boolean = false;
+
+  private rechargeLoading: boolean = false;
+
+  private rechargeFinished: boolean = false;
 
   private settleCalue: string = '';
 
   private carValue: string = '';
+
+  private currentDate: Date = dayjs().toDate();
+
+  private minDate: Date = dayjs().subtract(2, 'year').toDate();
+
+  private maxDate: Date = dayjs().toDate();
 
   private settleOption: any = [
     { text: '结清状态', value: '' },
     { text: '未结清', value: '0' },
     { text: '已结清', value: '1' },
   ];
+
+  private toggleDate() {
+    this.isShowDate = true;
+  }
+
+  private onLoad() {
+  }
 
   get carsOption() {
     return [
@@ -114,6 +157,7 @@ export default class AdminRecharge extends Vue {
   private async created() {
     this.getAllRechargesList();
     this.carsList = await getAllCarsList();
+    this.loading = false;
   }
 
   private async delRechargeItemById(id: string) {
@@ -176,4 +220,14 @@ export default class AdminRecharge extends Vue {
 
 </script>
 <style lang='stylus' scoped>
+.wrapper
+  width 100vw
+  height: 100%
+  background-color: #fff
+  overflow hidden
+
+.container
+  width 100%
+  height 100%
+  overflow-y auto
 </style>

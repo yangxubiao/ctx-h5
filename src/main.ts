@@ -13,12 +13,18 @@ import {
   DropdownItem,
   Uploader,
   Lazyload,
+  SwipeCell,
+  Dialog,
+  Loading,
+  List,
+  DatetimePicker,
 } from 'vant';
 import App from './App.vue';
 import router from './router';
 import store from './store';
 import '@/utils/axios';
 import '@/utils/encrypt';
+import 'assets/css/global.css';
 import 'vant/lib/index.css';
 
 Vue.use(Lazyload);
@@ -34,6 +40,11 @@ Vue.use(Field);
 Vue.use(Grid);
 Vue.use(GridItem);
 Vue.use(Button);
+Vue.use(SwipeCell);
+Vue.use(Dialog);
+Vue.use(Loading);
+Vue.use(List);
+Vue.use(DatetimePicker);
 
 Vue.config.productionTip = false;
 

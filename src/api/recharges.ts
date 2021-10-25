@@ -12,7 +12,8 @@ export async function createRecharge(
 export async function getAllRechargesList(
   pramas: any,
 ) {
-  const result = await Ax.post('/recharges/findAllRechargesList', pramas);
+  const { perPage = 10, queryPage = 1, ...rest } = pramas;
+  const result = await Ax.post(`/recharges/findAllRechargesList?per_page=${perPage}&query_page=${queryPage}`, rest);
   return result;
 }
 

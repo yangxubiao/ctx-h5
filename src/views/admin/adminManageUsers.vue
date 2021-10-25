@@ -1,11 +1,12 @@
 <template>
-  <div>
-    <van-form @submit="onSubmit">
+  <div class="wrapper">
+  <van-form @submit="throttleSubmit" class="container">
   <van-field
     v-model="formObj.name"
     name="用户名"
     label="用户名"
     placeholder="用户名"
+    class="field"
     :rules="[{ required: true, message: '请填写用户名' }]"
   />
   <van-field
@@ -13,6 +14,7 @@
     name="手机号"
     label="手机号"
     placeholder="手机号"
+    class="field"
     :rules="[{ required: true, message: '请输入手机号' }]"
   />
   <van-field
@@ -23,6 +25,7 @@
     label="冻结状态"
     placeholder="点击选择冻结状态"
     @click="handlerPicker('10')"
+    class="field"
     :rules="[{ required: true, message: '请选择冻结状态' }]"
   />
   <van-field
@@ -32,6 +35,7 @@
     name="密码"
     label="密码"
     placeholder="密码"
+    class="field"
     :rules="[{ required: true, message: '请填写密码' }]"
   />
   <van-field
@@ -41,6 +45,7 @@
     name="确认密码"
     label="确认密码"
     placeholder="确认密码"
+    class="field"
     :rules="[{ required: true, message: '确认密码' }]"
   />
   <van-field
@@ -51,6 +56,7 @@
     label="角色"
     placeholder="点击选择角色"
     @click="handlerPicker('11')"
+    class="field"
     :rules="[{ required: true, message: '请选择角色' }]"
   />
   <van-field
@@ -61,6 +67,7 @@
     :value="formObj.carName"
     label="车队"
     placeholder="点击选择车队"
+    class="field"
     @click="handlerPicker('1')"
     :rules="[{ required: true, message: '请选择车队' }]"
   />
@@ -73,6 +80,7 @@
     label="加油点"
     placeholder="点击选择加油点"
     @click="handlerPicker('3')"
+    class="field"
     :rules="[{ required: true, message: '请选择加油点' }]"
   />
   <van-field
@@ -81,6 +89,7 @@
     name="车牌号"
     label="车牌号"
     placeholder="车牌号"
+    class="field"
     :rules="[{ required: true, message: '请填写车牌号' }]"
   />
   <van-popup v-model="showPicker" position="bottom">
@@ -106,6 +115,7 @@ Vue,  Component,
 import { getAllCarsList } from '@/api/cars'
 import { getAllOilSitesList } from '@/api/oils'
 import { createUser, getUserById, updateUser } from '@/api/users'
+import debounce from 'lodash/debounce';
 
 @Component
 export default class adminRegister extends Vue {
@@ -186,6 +196,10 @@ export default class adminRegister extends Vue {
     gasProxyFee: '', // (对于加油工必填）
   }
 
+  private throttleSubmit = debounce(() => {
+    this.onSubmit()
+  }, 500)
+
   private async onSubmit() {
     const { confirmPassWord, ...rest } = this.formObj;
     if (this.scene === 'add') {
@@ -202,6 +216,10 @@ export default class adminRegister extends Vue {
         jsonObject: rest
       })
     }
+
+    this.$router.push({
+      name: 'adminUsers'
+    })
 
   }
 
@@ -298,4 +316,12 @@ export default class adminRegister extends Vue {
 
 </script>
 <style lang='stylus' scoped>
+@import '~@/stylus/mixin.styl'
+.wrapper
+  height 100%
+  width 100%
+  flexStyle(flexDirection: column)
+
+.container
+  width 90%
 </style>

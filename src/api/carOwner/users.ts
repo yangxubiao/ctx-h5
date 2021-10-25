@@ -1,8 +1,9 @@
 import Ax from '@/utils/axios';
 
 // 获取当前用户下的所有驾驶员
-export async function getCurrentUserAllDrivesList() {
-  const result = await Ax.post('/users/getCurrentUserAllDrivesList');
+export async function getCurrentUserAllDrivesList(pramas: any) {
+  const { perPage = 10, queryPage = 1, ...rest } = pramas;
+  const result = await Ax.post(`/users/getCurrentUserAllDrivesList?per_page=${perPage}&query_page=${queryPage}`, rest);
   return result;
 }
 

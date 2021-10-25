@@ -21,3 +21,5 @@ interface ResponseData<T = any> {
    */
   errorCode?: string;
 }
+
+declare module 'es6-tween'

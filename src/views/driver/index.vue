@@ -1,15 +1,12 @@
 <template>
-  <div>
-    驾驶员
-      <van-grid>
-      <van-grid-item
-        v-for="(gridItem, gridIndex) in grids"
-        :key="gridIndex"
-        icon="photo-o" 
-        @click='jumpPage(gridItem.page)' 
-        :text="gridItem.name" 
-      />
-    </van-grid>
+    <div class="wrapper">
+    <div class="lnum">
+      加油总升数: {{ tweeningValue }}
+    </div>
+    <div class="container">
+      <van-cell class="cell-item" title="加油" is-link @click="jumpPage('driverGas')" />
+      <van-cell class="cell-item"   title="修改密码" is-link @click="jumpPage('password')" />
+    </div>
   </div>
 </template>
 
@@ -17,18 +14,43 @@
 import {
 Vue,  Component,
 } from 'vue-property-decorator';
+import { getCurrentLoginGasRecord } from '@/api/driver/oil'
+import tween from '@/utils/tween';
+import { stringToNumber } from '@/utils/string';
+import { BigNumber } from 'bignumber.js';
+
 @Component
 export default class DriverIndex extends Vue {
-  private grids = [
-    {
-      name: '加油',
-      page: 'driverGas',
-    },
-    {
-      name: '修改密码',
-      page: 'password',
-    },
-  ]
+
+  //值
+  private tweeningValue: string = '0'
+
+  private gasRecord: any = [];
+
+  /**
+   * 数字每一帧滚动触发的回调
+   */
+  updateValue(tweenobj: { object: { tweeningValue: string } }) {
+    this.tweeningValue = stringToNumber(tweenobj.object.tweeningValue).toFixed(0);
+  }
+
+  get totalLum() {
+      const num = this.gasRecord.reduce((pre: any, next: any)=> {
+      return new BigNumber(pre).plus(next.oilLnum)
+    }, 0)
+    return num;
+  }
+
+  private async getCurrentLoginGasRecord() {
+    const result = await getCurrentLoginGasRecord();
+    this.gasRecord = result;
+    // 动画开始
+    tween(0, this.totalLum, this.updateValue);
+  }
+
+  private mounted() {
+    this.getCurrentLoginGasRecord();
+  }
 
   private jumpPage(str: string) {
     this.$router.push({
@@ -39,4 +61,19 @@ export default class DriverIndex extends Vue {
 
 </script>
 <style lang='stylus' scoped>
+@import '~@/stylus/mixin.styl'
+.wrapper
+  height 100%
+  width 100%
+  flexStyle(flexDirection: column)
+
+.lnum
+  color #fff
+
+.container
+  width 100%
+  padding 40px
+
+.cell-item
+  margin-top 20px
 </style>

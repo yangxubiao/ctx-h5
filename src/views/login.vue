@@ -1,24 +1,34 @@
 <template>
-    <van-form @submit="onSubmit">
-  <van-field
-    v-model="name"
-    name="用户名"
-    label="用户名"
-    placeholder="用户名"
-    :rules="[{ required: true, message: '请填写用户名' }]"
-  />
-  <van-field
-    v-model="password"
-    type="password"
-    name="密码"
-    label="密码"
-    placeholder="密码"
-    :rules="[{ required: true, message: '请填写密码' }]"
-  />
-  <div style="margin: 16px;">
-    <van-button round block type="info" native-type="submit">提交</van-button>
+<div class="wrapper">
+  <div class="title">
+    车行通
   </div>
-</van-form>
+  <div class="container">
+    <van-form @submit="throttleSubmit()">
+      <van-field
+        v-model="name"
+        name="用户名"
+        label="用户名"
+        placeholder="用户名"
+        class="field"
+        :rules="[{ required: true, message: '请填写用户名' }]"
+      />
+      <van-field
+        v-model="password"
+        type="password"
+        name="密码"
+        label="密码"
+        placeholder="密码"
+        class="field"
+        :rules="[{ required: true, message: '请填写密码' }]"
+      />
+      <div style="margin: 16px;">
+        <van-button round block type="info" native-type="submit">提交</van-button>
+      </div>
+    </van-form>
+  </div>
+</div>
+
 </template>
 
 <script lang='ts'>
@@ -27,6 +37,7 @@ Vue,  Component,
 } from 'vue-property-decorator';
 import { login } from '@/api/users'
 import { setLocalData } from '@/utils/local'
+import debounce from 'lodash/debounce';
 
 @Component
 export default class Login extends Vue {
@@ -34,6 +45,10 @@ export default class Login extends Vue {
   private name: string = '';
 
   private password: string = '';
+
+  private throttleSubmit = debounce(() => {
+    this.onSubmit()
+  }, 500)
 
   private async onSubmit() {
     const result: any = await login({
@@ -49,11 +64,25 @@ export default class Login extends Vue {
         value: result.token,
       },
     );
-    this.$router.push({path: '/'});
+    this.$router.replace({path: '/'});
   }
 
 }
 
 </script>
 <style lang='stylus' scoped>
+@import '~@/stylus/mixin.styl'
+.wrapper
+  height 100%
+  width 100%
+  flexStyle(flexDirection: column)
+  .title
+    margin-bottom 30px
+    color #fff
+
+.container
+  width 90%
+
+.field
+  margin-top 20px
 </style>

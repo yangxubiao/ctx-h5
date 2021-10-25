@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <van-form @submit="onSubmit">
+  <div class="wrapper">
+    <van-form @submit="throttleSubmit" class="container">
   <van-field
     v-model="formObj.name"
     name="用户名"
@@ -72,6 +72,7 @@ Vue,  Component,
 } from 'vue-property-decorator';
 import { createUser, getUserById, updateUser } from '@/api/users'
 import { getCurrentUser } from '@/api/carOwner/users'
+import debounce from 'lodash/debounce';
 
 @Component
 export default class adminRegister extends Vue {
@@ -121,13 +122,17 @@ export default class adminRegister extends Vue {
     carId: '', // (对与驾驶员和车老板必填)
   }
 
+  private throttleSubmit = debounce(() => {
+    this.onSubmit()
+  }, 500)
+
   private async onSubmit() {
     const { confirmPassWord, ...rest } = this.formObj;
     if (this.scene === 'add') {
       if (this.formObj.password.trim() !== this.formObj.confirmPassWord.trim()) {
         return this.$toast('密码不一致,请重新填写');
       }
-      const result = await createUser({
+      await createUser({
         isEncrypt: true,
         jsonObject: {
           ...rest,
@@ -136,11 +141,15 @@ export default class adminRegister extends Vue {
         }
       })
     } else {
-      const result = await updateUser({
+      await updateUser({
         isEncrypt: true,
         jsonObject: rest
       })
     }
+
+    this.$router.push({
+      name: 'carDrives'
+    })
 
   }
 
@@ -179,4 +188,12 @@ export default class adminRegister extends Vue {
 
 </script>
 <style lang='stylus' scoped>
+@import '~@/stylus/mixin.styl'
+.wrapper
+  height 100%
+  width 100%
+  flexStyle(flexDirection: column)
+
+.container
+  width 90%
 </style>

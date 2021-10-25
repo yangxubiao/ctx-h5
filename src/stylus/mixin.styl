@@ -1,0 +1,43 @@
+/* 弹性布局 */
+flexStyle(displayDefault = flex , justifyContent = center, alignItems = center, flexDirection = row) {
+  display: displayDefault;
+  justify-content: justifyContent;
+  align-items: alignItems;
+  flex-direction: flexDirection;
+}
+
+/* 背景布局 */
+backgroundStyle(backgroundColor = #FFFFFF ,  position = center, width = 100%,  height = 100% , repeat = no-repeat , url ) {
+  background backgroundColor position   / width height repeat url(url);
+}
+
+/* 字体布局 */
+fontStyle(fontSize, fontWeight = bold,color ,textAlign = left){
+  font-size: unit(fontSize, px);
+  font-weight: fontWeight;
+  color: color;
+  text-align: textAlign;
+}
+
+/* 宽高布局 */
+widthAndHeightStyle(width, height) {
+  width: unit(width, px);
+  height: unit(height, px);
+}
+
+/* 外边距溢出 */
+marginOverflow(){
+  display table
+  content ""
+}
+
+/* 文本省略号 */
+textEllipsis(line = 1){
+  text-overflow: -o-ellipsis-lastline
+  text-overflow: ellipsis
+  display: -webkit-box
+  -webkit-line-clamp: line
+  line-clamp: line
+  -webkit-box-orient: vertical
+  overflow: hidden
+}

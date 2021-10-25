@@ -1,18 +1,19 @@
 
 <template>
-  <div>
-    <router-link v-text="'添加'" to='admin-add-oil' />
-  <van-cell-group>
-    <van-cell 
-      v-for="(oilItem, oilIndex) in allOilList"
-      :key="oilIndex"
-      :title="oilItem.name"
+  <Loading v-if="loading" />
+  <div v-else class="wrapper">
+    <van-swipe-cell
+        v-for="(oilItem, oilIndex) in allOilList"
+        :key="oilIndex"
     >
-      <div @click="delOilItemById(oilItem._id)">
-      删除
+      <van-cell :title="oilItem.name" :value="'代价费: '+ oilItem.proxyFee + '毛'"/>
+      <template #right>
+        <van-button square type="danger" text="删除" @click="delOilItemById(oilItem)" />
+      </template>
+    </van-swipe-cell>
+    <div class="tips">
+      没有更多了, <span @click="addGasSite" class="add-gas">点击这里添加更多加油点</span>
     </div>
-    </van-cell>
-  </van-cell-group>`
   </div>
 </template>
 
@@ -21,28 +22,59 @@ import {
 Vue,  Component,
 } from 'vue-property-decorator';
 import { getAllOilSitesList, delOilItemById } from '@/api/oils'
+import Loading from '@/components/loading.vue';
 
-@Component
+@Component({
+  components: {
+    Loading,
+  }
+})
 export default class AdminOil extends Vue {
+
+  private loading: boolean = true;
 
   private allOilList: any = [];
 
-  private created() {
-    this.getAllOilSitesList();
+  private async created() {
+    const result =  await getAllOilSitesList();
+    this.allOilList = result
+    this.loading = false;
   }
 
   private async getAllOilSitesList() {
-    const result =await getAllOilSitesList();
+    const result = await getAllOilSitesList();
     this.allOilList = result
   }
 
-  private async delOilItemById(id: string) {
-    await delOilItemById(id);
-    this.getAllOilSitesList();
+  private async delOilItemById(oilItem: any) {
+    this.$dialog.confirm({
+      title: '删除用户',
+      message: `确定要删除 ${oilItem.name} 吗 ?`,
+    })
+    .then(async () => {
+      await delOilItemById(oilItem._id);
+      this.$toast('删除成功')
+      this.getAllOilSitesList();
+    }).catch(()=>{})
+  }
+
+  private addGasSite() {
+    this.$router.push({ path: '/admin-add-oil'})
   }
 
 }
 
 </script>
 <style lang='stylus' scoped>
+.wrapper
+  background-color #fff
+
+.add-gas
+  color #00f
+  font-size 16px
+
+.tips
+  font-size 16px
+  text-align center
+  padding 12px
 </style>
