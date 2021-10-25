@@ -51,7 +51,7 @@ export default class addCarOwner extends Vue {
       isEncrypt: true,
       jsonObject: this.formObj
     });
-
+    this.$toast('添加成功');
     this.$router.push({
       name: 'adminCarOwners'
     })

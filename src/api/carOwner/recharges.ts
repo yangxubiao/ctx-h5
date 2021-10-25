@@ -5,6 +5,7 @@ import Ax from '@/utils/axios';
 export async function getCurrentUserRechargesList(
   pramas: any,
 ) {
-  const result = await Ax.post('/recharges/getCurrentUserRechargesList', pramas);
+  const { perPage = 10, queryPage = 1, ...rest } = pramas.jsonObject;
+  const result = await Ax.post(`/recharges/getCurrentUserRechargesList?per_page=${perPage}&query_page=${queryPage}`, rest);
   return result;
 }

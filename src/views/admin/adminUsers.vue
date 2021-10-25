@@ -84,7 +84,6 @@ export default class adminCarOwners extends Vue {
     } catch (error) {
       console.log(error, 'error')
     }
-
   }
 
   private roleChange(value: any) {

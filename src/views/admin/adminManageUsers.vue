@@ -210,13 +210,14 @@ export default class adminRegister extends Vue {
         isEncrypt: true,
         jsonObject: rest
       })
+      this.$toast('添加成功');
     } else {
       const result = await updateUser({
         isEncrypt: true,
         jsonObject: rest
       })
     }
-
+    this.$toast('编辑成功');
     this.$router.push({
       name: 'adminUsers'
     })

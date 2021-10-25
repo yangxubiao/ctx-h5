@@ -1,24 +1,44 @@
 <template>
-  <div>
+  <Loading v-if="loading" />
+  <div v-else class="wrapper" >
     <van-dropdown-menu>
       <van-dropdown-item @change="settleChange" v-model="settleCalue" :options="settleOption" :key="1" />
     </van-dropdown-menu>
-      <van-cell-group>
     <van-cell 
-      v-for="(rechargeItem, rechargeIndex) in rechargesList"
-      :key="rechargeIndex"
-      :title="rechargeItem.name"
+      class="form-date" 
+      @click="toggleDate"
+      icon="arrow-down" 
+      :title="timeFormat(nowDate, 'YYYY年MM月')" 
+      :value="getProxyPree"
+    />
+    <van-list
+      v-model="rechargeLoading"
+      :finished="rechargeFinished"
+      @load="onLoad"
+      class="container"
     >
-      {{rechargeItem.chargeLnum}}
-      {{rechargeItem.settleName}}
-      {{timeFormat(rechargeItem.createdAt)}}
-    </van-cell>
-  </van-cell-group>
-  <div>
-    <p>总 {{totalTunnage}} 吨数</p>
-    <p>总 {{totalLnum}} 升数</p>
-    <p>总应还代加费金额: {{shouldRepayAmount}} 元</p>
-  </div>
+      <van-swipe-cell  
+        v-for="(rechargeItem, rechargeIndex) in rechargesList"
+        :key="rechargeIndex"
+      >
+        <van-cell :title="rechargeItem.name" :value="rechargeItem.chargeTunnage + '吨'" :label="timeFormat(rechargeItem.createdAt, 'YYYY-MM-DD HH:mm:ss')"/>
+      </van-swipe-cell>
+    </van-list>
+    <van-popup
+    v-model="isShowDate"
+    round
+    position="bottom"
+  >
+    <van-datetime-picker
+      v-model="currentDate"
+      type="year-month"
+      title="选择年月日"
+      @confirm="confirm"
+      @cancel="cancel"
+      :min-date="minDate"
+      :max-date="maxDate"
+    />
+  </van-popup>
   </div>
 </template>
 
@@ -29,11 +49,57 @@ Vue,  Component,
 import { getCurrentUserRechargesList } from '@/api/carOwner/recharges'
 import dayjs from 'dayjs';
 import { BigNumber } from 'bignumber.js';
+import Loading from '@/components/loading.vue';
+import pickBy from 'lodash/pickBy';
 
-@Component
-export default class AdminRecharge extends Vue {
+@Component({
+  components: {
+    Loading,
+  }
+})
+export default class DriverRecharge extends Vue {
+
+  private loading: boolean = true;
 
   private settleCalue: string = '';
+
+  private isShowDate: boolean = false;
+
+  private rechargeLoading: boolean = false;
+
+  private rechargeFinished: boolean = false;
+
+  private nowDate: Date = new Date();
+
+  private currentDate: Date = dayjs().toDate();
+
+  private minDate: Date = dayjs().subtract(2, 'year').toDate();
+
+  private maxDate: Date = dayjs().toDate();
+
+  private onLoad() {
+    this.serachObj.queryPage+=1;
+    this.getAllRechargesList();
+  }
+
+  get getProxyPree() {
+    return this.settleCalue === '1' ? '' :  `应还代加费${this.shouldRepayAmount}元`
+  }
+
+  private toggleDate() {
+    this.isShowDate = true;
+  }
+
+  private confirm(date: Date) {
+    this.nowDate = dayjs(date).toDate();
+    this.isShowDate = false;
+    this.serachObj.isWhole = true;
+    this.getAllRechargesList();
+  }
+
+  private cancel() {
+    this.isShowDate = false;
+  }
 
   private settleOption: any = [
     { text: '结清状态', value: '' },
@@ -67,39 +133,69 @@ export default class AdminRecharge extends Vue {
   }
 
   private serachObj: any = {
+    perPage: 10,
+    queryPage: 1,
     settleName: '',
     settleStatus: '',
   }
 
+  get serachParams() {
+    return pickBy(this.serachObj);
+  }
+
   private rechargesList: any = [];
 
-  private timeFormat(str: string) {
-    return dayjs(str).format('YYYY-MM-DD');
+  private timeFormat(str: string, format: string) {
+    return dayjs(str).format(format);
   }
 
   private async created() {
+    this.serachObj.isWhole = true;
     this.getAllRechargesList();
   }
+
   private async getAllRechargesList() {
-    let serachObj: any = {};
+    if(this.serachObj.settleName === '结清状态') {
+      delete this.serachObj.settleName
+    }
 
-    for(let key  in this.serachObj) {
-      if(
-        this.serachObj.hasOwnProperty(key) && !['', undefined].includes(this.serachObj[key])
-        ) {
-        serachObj[key] = this.serachObj[key];
+    let isWhole: boolean = this.serachObj.isWhole;
+    if (this.serachObj.isWhole) {
+        this.serachObj.perPage = 10;
+        this.serachObj.queryPage = 1;
+        delete this.serachObj.isWhole
+    }
+    if (isWhole) {
+      this.loading = true;
+    }
+    try {
+      const result: any = await getCurrentUserRechargesList({
+        isEncrypt: true,
+        jsonObject: {
+          ...this.serachParams,
+          time: dayjs(this.nowDate).valueOf(),
+        }
+      });
+      if (isWhole) {
+        this.loading = false;
       }
+      if (result && result.length < this.serachObj.perPage) {
+        this.rechargeFinished = true;
+      } else {
+        this.rechargeFinished = false;
+      }
+      this.rechargeLoading = false;
+      if (isWhole) {
+        this.rechargesList = result;
+      } else {
+        this.rechargesList = [...this.rechargesList, ...result];
+      }
+    } catch (error){
+      if (isWhole) {
+        this.loading = false;
+      }
+      console.log(error, 'error')
     }
-
-    if(serachObj.settleName === '结清状态') {
-      delete serachObj.settleName
-    }
-
-    const result = await getCurrentUserRechargesList({
-      isEncrypt: true,
-      jsonObject: serachObj
-    });
-    this.rechargesList = result;
   }
 
   private settleChange(value: any) {
@@ -110,11 +206,26 @@ export default class AdminRecharge extends Vue {
         settleStatus: serachObj.value,
       }
     };
-    this.serachObj = {...this.serachObj, ...serachObj}
+    this.serachObj = {
+      ...this.serachObj,
+      ...serachObj,
+      isWhole: true,
+    }
     this.getAllRechargesList();
   }
 }
 
 </script>
 <style lang='stylus' scoped>
+@import '~@/stylus/mixin.styl'
+.wrapper
+  width 100vw
+  height: 100%
+  background-color: #fff
+  overflow hidden
+
+.container
+  width 100%
+  height 565px
+  overflow-y auto
 </style>

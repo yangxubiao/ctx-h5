@@ -1,5 +1,6 @@
 <template>
-  <van-form @submit="onSubmit">
+<div class="wrapper">
+    <van-form @submit="onSubmit" class="container">
     <van-field
       readonly
       clickable
@@ -51,6 +52,7 @@
     <van-button round block type="info" native-type="submit">提交</van-button>
   </div>
 </van-form>
+</div>
 </template>
 
 <script lang='ts'>
@@ -60,6 +62,7 @@ Vue,  Component,
 import { getAllCarslist } from '@/api/users'
 import { BigNumber } from 'bignumber.js';
 import { createRecharge, getRechargeById, updateRecharge } from '@/api/recharges'
+import debounce from 'lodash/debounce';
 
 @Component
 export default class adminManageRecharge extends Vue {
@@ -118,20 +121,27 @@ export default class adminManageRecharge extends Vue {
     return this.$route.query.scene;
   }
 
+  private throttleSubmit = debounce(() => {
+    this.onSubmit()
+  }, 500)
+
   private async onSubmit() {
     if (this.scene === 'add') {
       const result = await createRecharge({
         isEncrypt: true,
         jsonObject: this.formObj
       });
+      this.$toast('添加成功')
     } else {
       const result = await updateRecharge({
         isEncrypt: true,
         jsonObject: this.formObj
       })
-      console.log(result, 'result')
+      this.$toast('编辑成功')
     }
-
+    this.$router.push({
+      name: 'adminRecharge'
+    })
   }
 
   private onConfirm(obj: any) {
@@ -167,4 +177,12 @@ export default class adminManageRecharge extends Vue {
 
 </script>
 <style lang='stylus' scoped>
+@import '~@/stylus/mixin.styl'
+.wrapper
+  height 100%
+  width 100%
+  flexStyle(flexDirection: column)
+
+.container
+  width 90%
 </style>

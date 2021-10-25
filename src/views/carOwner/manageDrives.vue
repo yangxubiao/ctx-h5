@@ -138,6 +138,10 @@ export default class adminRegister extends Vue {
           ...rest,
           carId: this.currentUserInfo.carId,
           carName: this.currentUserInfo.carName,
+          carProxyFee: this.currentUserInfo.carProxyFee,
+          gasId:  this.currentUserInfo.gasId,
+          gasName: this.currentUserInfo.gasName,
+          gasProxyFee: this.currentUserInfo.gasProxyFee,
         }
       })
     } else {

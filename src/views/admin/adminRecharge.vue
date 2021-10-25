@@ -1,17 +1,18 @@
 <template>
   <Loading v-if="loading" />
   <div v-else class="wrapper">
-    <div @click="manageRearge">
-      添加
-    </div>
     <van-dropdown-menu>
       <van-dropdown-item @change="settleChange" v-model="settleCalue" :options="settleOption" :key="1" />
       <van-dropdown-item @change="carChange" v-model="carValue" :options="carsOption" :key="2"  />
     </van-dropdown-menu>
     
-    <div class="form-date" @click="toggleDate">
-      222   
-    </div>
+    <van-cell
+      class="form-date" 
+      @click="toggleDate"
+      icon="arrow-down" 
+      :title="timeFormat(nowDate, 'YYYY年MM月')" 
+      :value="getProxyPree"
+    />
     <van-list
       v-model="rechargeLoading"
       :finished="rechargeFinished"
@@ -22,30 +23,33 @@
         v-for="(rechargeItem, rechargeIndex) in rechargesList"
         :key="rechargeIndex"
       >
-        <van-cell :title="rechargeItem.name " :value="rechargeItem.chargeLnum" :label="timeFormat(rechargeItem.createdAt)"/>
+        <van-cell :title="rechargeItem.name" :value="rechargeItem.chargeTunnage + '吨'" :label="timeFormat(rechargeItem.createdAt, 'YYYY-MM-DD HH:mm:ss')"/>
         <template #right>
-          <van-button square type="danger" text="删除" @click="editReachrgeItemById(rechargeItem)" />
-          <van-button square type="primary" text="编辑" @click="delRechargeItemById(rechargeItem._id)" />
+          <div class="more">
+            <van-button square type="danger" text="删除" @click="delRechargeItemById(rechargeItem)" />
+            <van-button square type="primary" text="编辑" @click="editReachrgeItemById(rechargeItem._id)" />
+          </div>
         </template>
       </van-swipe-cell>
-
       <template #finished>
-        没有更多了, <span @click="addUser" class="add-user">点击这里充值</span>
+        没有更多了, <span @click="manageRearge" class="add-recharge">点击这里充值</span>
       </template>
     </van-list>
-  <!-- <div>
-    <p>总 {{totalTunnage}} 吨数</p>
-    <p>总 {{totalLnum}} 升数</p>
-    <p>总应还代加费金额: {{shouldRepayAmount}} 元</p>
-  </div> -->
-  <van-datetime-picker
-    v-if="isShowDate"
-    v-model="currentDate"
-    type="year-month"
-    title="选择年月日"
-    :min-date="minDate"
-    :max-date="maxDate"
-  />
+    <van-popup
+    v-model="isShowDate"
+    round
+    position="bottom"
+  >
+    <van-datetime-picker
+      v-model="currentDate"
+      type="year-month"
+      title="选择年月日"
+      @confirm="confirm"
+      @cancel="cancel"
+      :min-date="minDate"
+      :max-date="maxDate"
+    />
+  </van-popup>
   </div>
 </template>
 
@@ -58,6 +62,7 @@ import dayjs from 'dayjs';
 import { getAllCarsList } from '@/api/cars';
 import { BigNumber } from 'bignumber.js';
 import Loading from '@/components/loading.vue';
+import pickBy from 'lodash/pickBy';
 
 @Component({
   components: {
@@ -76,6 +81,8 @@ export default class AdminRecharge extends Vue {
 
   private settleCalue: string = '';
 
+  private nowDate: Date = new Date();
+
   private carValue: string = '';
 
   private currentDate: Date = dayjs().toDate();
@@ -83,6 +90,10 @@ export default class AdminRecharge extends Vue {
   private minDate: Date = dayjs().subtract(2, 'year').toDate();
 
   private maxDate: Date = dayjs().toDate();
+
+  get getProxyPree() {
+    return this.settleCalue === '1' ? '' :  `应还代加费${this.shouldRepayAmount}元`
+  }
 
   private settleOption: any = [
     { text: '结清状态', value: '' },
@@ -95,6 +106,8 @@ export default class AdminRecharge extends Vue {
   }
 
   private onLoad() {
+    this.serachObj.queryPage+=1;
+    this.getAllRechargesList();
   }
 
   get carsOption() {
@@ -118,11 +131,6 @@ export default class AdminRecharge extends Vue {
     return num;
   }
 
-  // 总升数
-  get totalLnum() {
-    return new BigNumber(this.totalTunnage).multipliedBy(process.env.VUE_APP_API_DEFAULT_L_NUM).toString();
-  }
-
   // 总应还代加金额
   get shouldRepayAmount(){
     const num = this.rechargesList.filter((item: any) => item.settleStatus === '0').reduce((pre: any, next: any)=> {
@@ -136,6 +144,8 @@ export default class AdminRecharge extends Vue {
   }
 
   private serachObj: any = {
+    perPage: 10,
+    queryPage: 1,
     settleName: '',
     settleStatus: '',
     carName: '',  // 车队名称
@@ -150,43 +160,89 @@ export default class AdminRecharge extends Vue {
     this.$router.push({ path: '/admin-manage-recharge', query: {scene: 'add'}})
   }
 
-  private timeFormat(str: string) {
-    return dayjs(str).format('YYYY-MM-DD HH:mm:ss');
+  private confirm(date: Date) {
+    this.nowDate = dayjs(date).toDate();
+    this.isShowDate = false;
+    this.serachObj.isWhole = true;
+    this.getAllRechargesList();
+  }
+
+  private cancel() {
+    this.isShowDate = false;
+  }
+
+  private timeFormat(str: string, format: 'string') {
+    return dayjs(str).format(format);
+  }
+
+  get serachParams() {
+    return pickBy(this.serachObj);
   }
 
   private async created() {
+    this.serachObj.isWhole = true;
     this.getAllRechargesList();
     this.carsList = await getAllCarsList();
-    this.loading = false;
   }
 
-  private async delRechargeItemById(id: string) {
-    await delRechargeItemById(id);
-    this.getAllRechargesList();
+  private async delRechargeItemById(rechargeItem: any) {
+    this.$dialog.confirm({
+      title: '删除用户',
+      message: `确定要删除 ${rechargeItem.name} 吗 ?`,
+    })
+    .then(async () => {
+      await delRechargeItemById(rechargeItem._id);
+      this.$toast('删除成功')
+      this.serachObj.isWhole = true;
+      this.getAllRechargesList()
+    }).catch(()=>{})
   }
 
   private async getAllRechargesList() {
-    let serachObj: any = {};
+    if(this.serachObj.settleName === '结清状态') {
+      delete this.serachObj.settleName
+    }
 
-    for(let key  in this.serachObj) {
-      if(this.serachObj.hasOwnProperty(key) && !['', undefined].includes(this.serachObj[key])) {
-        serachObj[key] = this.serachObj[key];
+    if(this.serachObj.carName === '车队名称') {
+      delete this.serachObj.carName
+    }
+    let isWhole: boolean = this.serachObj.isWhole;
+    if (this.serachObj.isWhole) {
+        this.serachObj.perPage = 10;
+        this.serachObj.queryPage = 1;
+        delete this.serachObj.isWhole
+    }
+    if (isWhole) {
+      this.loading = true;
+    }
+    try {
+      const result: any = await getAllRechargesList({
+        isEncrypt: true,
+        jsonObject: {
+          ...this.serachParams,
+          time: dayjs(this.nowDate).valueOf(),
+        }
+      });
+      if (isWhole) {
+        this.loading = false;
       }
+      if (result && result.length < this.serachObj.perPage) {
+        this.rechargeFinished = true;
+      } else {
+        this.rechargeFinished = false;
+      }
+      this.rechargeLoading = false;
+      if (isWhole) {
+        this.rechargesList = result;
+      } else {
+        this.rechargesList = [...this.rechargesList, ...result];
+      }
+    } catch (error) {
+      if (isWhole) {
+        this.loading = false;
+      }
+      console.log(error, 'error')
     }
-
-    if(serachObj.settleName === '结清状态') {
-      delete serachObj.settleName
-    }
-
-    if(serachObj.carName === '车队名称') {
-      delete serachObj.carName
-    }
-
-    const result = await getAllRechargesList({
-      isEncrypt: true,
-      jsonObject: serachObj
-    });
-    this.rechargesList = result;
   }
 
   private editReachrgeItemById(id: string) {
@@ -201,7 +257,11 @@ export default class AdminRecharge extends Vue {
         settleStatus: serachObj.value,
       }
     };
-    this.serachObj = {...this.serachObj, ...serachObj}
+    this.serachObj = {
+      ...this.serachObj,
+      ...serachObj,
+      isWhole: true,
+    }
     this.getAllRechargesList();
   }
 
@@ -213,21 +273,37 @@ export default class AdminRecharge extends Vue {
         carId: serachObj._id,
       }
     };
-    this.serachObj = {...this.serachObj, ...serachObj}
+    this.serachObj = {
+      ...this.serachObj,
+      ...serachObj,
+      isWhole: true,
+    }
     this.getAllRechargesList();
   }
+
 }
 
 </script>
 <style lang='stylus' scoped>
+@import '~@/stylus/mixin.styl'
 .wrapper
   width 100vw
   height: 100%
   background-color: #fff
   overflow hidden
+  display flex
+  flex-direction column
 
 .container
   width 100%
-  height 100%
+  flex auto
   overflow-y auto
+
+.add-recharge
+  color #00f
+
+.more
+  width 100%
+  height: 100%
+  flexStyle()
 </style>
