@@ -42,7 +42,12 @@ export default class DriverIndex extends Vue {
   }
 
   private async getCurrentLoginGasRecord() {
-    const result = await getCurrentLoginGasRecord();
+    const result = await getCurrentLoginGasRecord({
+        isEncrypt: true,
+        jsonObject: {
+          isWhole: true
+        }
+    });
     this.gasRecord = result;
     // 动画开始
     tween(0, this.totalLum, this.updateValue);

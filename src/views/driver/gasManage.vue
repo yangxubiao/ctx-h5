@@ -1,6 +1,6 @@
 <template>
-  <div>
-  <van-form @submit="onSubmit">
+  <div class="wrapper">
+  <van-form @submit="throttleSubmit" class="container">
   <van-field
     readonly
     clickable
@@ -47,12 +47,11 @@
 import {
 Vue,  Component,
 } from 'vue-property-decorator';
-import { getAllCarsList } from '@/api/cars'
 import { getAllOilSitesList } from '@/api/oils'
-import { createUser, getUserById, updateUser } from '@/api/users'
 import { getCurrentUser } from '@/api/carOwner/users'
 import { createOilRecord } from '@/api/driver/oil'
 import { uploadFile } from '@/api/home'
+import debounce from 'lodash/debounce';
 
 @Component
 export default class GasVue extends Vue {
@@ -86,12 +85,20 @@ export default class GasVue extends Vue {
     oilImg: '', // 加油图片
   }
 
+  private throttleSubmit = debounce(() => {
+    this.onSubmit()
+  }, 500)
+
   private async onSubmit() {
     if (!this.formObj.oilImg) {
       this.$toast('加油图片未上传')
     }
-    const result = await createOilRecord({
+    await createOilRecord({
       ...this.formObj,
+    });
+    this.$toast('加油成功')
+    this.$router.push({
+      name: 'driverGas'
     });
   }
 
@@ -141,4 +148,12 @@ export default class GasVue extends Vue {
 
 </script>
 <style lang='stylus' scoped>
+@import '~@/stylus/mixin.styl'
+.wrapper
+  height 100%
+  width 100%
+  flexStyle(flexDirection: column)
+
+.container
+  width 90%
 </style>

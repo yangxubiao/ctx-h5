@@ -46,7 +46,12 @@ export default class OilerIndex extends Vue {
   }
 
   private async getCurrentGasSiteRecord() {
-    const result = await getCurrentGasSiteRecord();
+    const result = await getCurrentGasSiteRecord({
+      isEncrypt: true,
+        jsonObject: {
+          isWhole: true
+        }
+    });
     this.gasSiteRecord = result;
     // 动画开始
     tween(0, this.totalLum, this.updateValue);

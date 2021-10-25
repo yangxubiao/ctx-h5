@@ -21,8 +21,9 @@ export async function delOilItemById(id: string) {
 }
 
 // 获取所有的加油记录
-export async function getAllGasRecords() {
-  const result = await Ax.get('/oil/getAllGasRecords');
+export async function getAllGasRecords(pramas: any) {
+  const { perPage = 10, queryPage = 1, ...rest } = pramas.jsonObject;
+  const result = await Ax.post(`/oil/getAllGasRecords?per_page=${perPage}&query_page=${queryPage}`, rest);
   return result;
 }
 

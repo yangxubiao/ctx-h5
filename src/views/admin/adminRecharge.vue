@@ -5,14 +5,13 @@
       <van-dropdown-item @change="settleChange" v-model="settleCalue" :options="settleOption" :key="1" />
       <van-dropdown-item @change="carChange" v-model="carValue" :options="carsOption" :key="2"  />
     </van-dropdown-menu>
-    
-    <van-cell
-      class="form-date" 
-      @click="toggleDate"
-      icon="arrow-down" 
-      :title="timeFormat(nowDate, 'YYYY年MM月')" 
-      :value="getProxyPree"
-    />
+    <div class="form-date"  @click="toggleDate">
+      <div>
+        <span>{{timeFormat(nowDate, 'YYYY年MM月')}}</span>
+        <van-icon name="arrow-down" />
+      </div>
+      <span>{{getProxyPree}}</span>
+    </div>
     <van-list
       v-model="rechargeLoading"
       :finished="rechargeFinished"
@@ -306,4 +305,11 @@ export default class AdminRecharge extends Vue {
   width 100%
   height: 100%
   flexStyle()
+
+.form-date
+  flexStyle(justifyContent: space-between)
+  padding 16px
+  font-size 14px
+  background-color #fff
+  color #323233
 </style>

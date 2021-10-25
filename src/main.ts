@@ -17,7 +17,10 @@ import {
   Dialog,
   Loading,
   List,
+  Icon,
   DatetimePicker,
+  Collapse,
+  CollapseItem,
 } from 'vant';
 import App from './App.vue';
 import router from './router';
@@ -27,7 +30,10 @@ import '@/utils/encrypt';
 import 'assets/css/global.css';
 import 'vant/lib/index.css';
 
+Vue.use(Collapse);
+Vue.use(CollapseItem);
 Vue.use(Lazyload);
+Vue.use(Icon);
 Vue.use(Uploader);
 Vue.use(DropdownMenu);
 Vue.use(DropdownItem);
