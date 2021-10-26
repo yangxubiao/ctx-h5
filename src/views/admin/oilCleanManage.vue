@@ -6,20 +6,20 @@
       clickable
       name="picker"
       :value="formObj.name"
-      label="车队负责人"
-      placeholder="点击选择车队负责人"
+      label="加油点负责人"
+      placeholder="点击选择加油点负责人"
       @click="handlerPicker('1')"
-      :rules="[{ required: true, message: '请选择车队负责人' }]"
+      :rules="[{ required: true, message: '请选择加油点负责人' }]"
     />
     <van-field
       readonly
       clickable
       name="picker"
-      :value="formObj.carName"
-      label="车队名"
-      placeholder="车队名"
+      :value="formObj.oilName"
+      label="加油点名称"
+      placeholder="加油点名称"
       @click="handlerPicker('2')"
-      :rules="[{ required: true, message: '请选择车队名' }]"
+      :rules="[{ required: true, message: '请选择加油点名称' }]"
     />
     <van-field 
       v-model="formObj.chargeTunnage" 
@@ -59,9 +59,9 @@
 import {
 Vue,  Component,
 } from 'vue-property-decorator';
-import { getAllCarslist } from '@/api/users'
+import { getAllOillist } from '@/api/users'
 import { BigNumber } from 'bignumber.js';
-import { createRecharge, getRechargeById, updateRecharge } from '@/api/recharges'
+import { createOilCleanRecord, getOilCleanRecordById, updateOilCleanRecord } from '@/api/oils'
 import debounce from 'lodash/debounce';
 
 @Component
@@ -98,16 +98,16 @@ export default class adminManageRecharge extends Vue {
     this.showPicker = !this.showPicker;
     let result: any = this.defaultRoleColumns();
     if (['1', '2'].includes(str)) {
-      result = await getAllCarslist();
+      result = await getAllOillist();
       result = result.map((item: any) => (
         {
-          text: str === '1' ? item.name : item.carName,
+          text: str === '1' ? item.name : item.gasName,
           value: {
             name: item.name,
             nameId: item._id,
-            carName: item.carName,
-            carId: item.carId,
-            proxyFee: item.carProxyFee,
+            oilName: item.gasName,
+            oilId: item.gasId,
+            proxyFee: item.gasProxyFee,
           }
         }
       ))
@@ -127,20 +127,20 @@ export default class adminManageRecharge extends Vue {
 
   private async onSubmit() {
     if (this.scene === 'add') {
-      const result = await createRecharge({
+      const result = await createOilCleanRecord({
         isEncrypt: true,
         jsonObject: this.formObj
       });
       this.$toast('添加成功')
     } else {
-      const result = await updateRecharge({
+      const result = await updateOilCleanRecord({
         isEncrypt: true,
         jsonObject: this.formObj
       })
       this.$toast('编辑成功')
     }
     this.$router.push({
-      name: 'adminRecharge'
+      name: 'oilClean'
     })
   }
 
@@ -154,8 +154,8 @@ export default class adminManageRecharge extends Vue {
   private formObj = {
     name: '', // 负责人姓名
     nameId: '', // 负责人Id
-    carName: '',  // 车队姓名
-    carId: '',  // 车队Id
+    oilName: '',  // 加油点姓名
+    oilId: '',  // 加油点 id
     proxyFee: '', // 代加费
     chargeTunnage: '',
     chargeLnum: '',
@@ -169,7 +169,7 @@ export default class adminManageRecharge extends Vue {
 
   private async created(){
     if (this.scene === 'update') {
-      const result: any = await getRechargeById((this.$route.query.id as string));
+      const result: any = await getOilCleanRecordById((this.$route.query.id as string));
       this.formObj = result;
     }
   }

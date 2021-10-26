@@ -9,6 +9,9 @@
         :text="gridItem.name" 
       />
     </van-grid>
+    <div class="password">
+      <van-cell title="修改密码" is-link @click="jumpPage('password')" />
+    </div>
   </div>
 </template>
 
@@ -23,13 +26,13 @@ export default class adminIndex extends Vue {
 
   private oilsIcon = require('@/assets/svg/oils.svg');
 
-  private passwordIcon = require('@/assets/svg/password.svg');
-
   private recordsIcon = require('@/assets/svg/records.svg');
 
   private trucksIcon = require('@/assets/svg/trucks.svg');
 
   private chargesIcon = require('@/assets/svg/charges.svg');
+
+  private oilCleanIcon = require('@/assets/svg/oilClean.svg');
 
   private grids = [
     {
@@ -58,9 +61,9 @@ export default class adminIndex extends Vue {
       img: this.recordsIcon,
     },
     {
-      name: '修改密码',
-      page: 'password',
-      img: this.passwordIcon,
+      name: '加油点结清页',
+      page: 'oilClean',
+      img: this.oilCleanIcon,
     },
   ]
 
@@ -80,5 +83,9 @@ export default class adminIndex extends Vue {
 .wrapper
   height 100%
   width 100%
-  flexStyle()
+  flexStyle(flexDirection: column, justifyContent: space-around)
+
+.password
+  width 100%
+  padding 20px
 </style>

@@ -50,3 +50,9 @@ export async function getAllCarslist() {
   const result = await Ax.post('/users/getAllCarslist');
   return result;
 }
+
+// 获取所有的加油点
+export async function getAllOillist() {
+  const result = await Ax.post('/users/getAllOillist');
+  return result;
+}

@@ -27,3 +27,42 @@ export async function getAllGasRecords(pramas: any) {
   return result;
 }
 
+// 添加一个加油点结清记录
+export async function createOilCleanRecord(
+  parmas: any,
+) {
+  const result = await Ax.post('/oil/createOilCleanRecord', parmas);
+  return result;
+}
+
+// 修改加油点结清记录
+export async function updateOilCleanRecord(
+  parmas: any,
+) {
+  const result = await Ax.put('/oil/updateOilCleanRecord', parmas);
+  return result;
+}
+
+// 删除加油点结清记录
+export async function delOilCleanRecord(
+  id: string,
+) {
+  const result = await Ax.delete(`/oil/delOilCleanRecord/${id}`);
+  return result;
+}
+
+// 获取加油点结清记录
+export async function getAllOilRecordRecords(
+  parmas: any,
+) {
+  const { perPage = 10, queryPage = 1, ...rest } = parmas.jsonObject;
+  const result = await Ax.post(`/oil/getAllOilRecordRecords?per_page=${perPage}&query_page=${queryPage}`, rest);
+  return result;
+}
+
+// 根据 id 获取结清记录
+export async function getOilCleanRecordById(id: string) {
+  const result = await Ax.get(`/oil/getOilCleanRecordById/${id}`);
+  return result;
+}
+

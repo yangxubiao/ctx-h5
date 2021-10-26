@@ -21,6 +21,8 @@ import {
   DatetimePicker,
   Collapse,
   CollapseItem,
+  Tabbar,
+  TabbarItem,
 } from 'vant';
 import App from './App.vue';
 import router from './router';
@@ -30,6 +32,8 @@ import '@/utils/encrypt';
 import 'assets/css/global.css';
 import 'vant/lib/index.css';
 
+Vue.use(Tabbar);
+Vue.use(TabbarItem);
 Vue.use(Collapse);
 Vue.use(CollapseItem);
 Vue.use(Lazyload);
