@@ -1,4 +1,4 @@
-import axios, { Axios } from 'axios';
+import axios from 'axios';
 import { Toast } from 'vant';
 import { encryptToObj, decryptToJava } from '@/utils/encrypt';
 import { getLocalData } from '@/utils/local';
@@ -43,7 +43,6 @@ service.interceptors.response.use(
         Toast(response?.data?.errorMas || '请稍后重试');
         return Promise.reject();
       }
-      console.log(response.data.result, 'result');
       return response.data.result;
     }
     return response;

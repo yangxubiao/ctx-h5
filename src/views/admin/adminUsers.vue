@@ -9,6 +9,7 @@
       <van-dropdown-item @change="roleChange" v-model="roleVlue" :options="roleOption" />
     </van-dropdown-menu>
     <van-list
+      class="common-list"
       v-model="userLoading"
       :finished="userFinished"
       @load="onLoad"
@@ -152,7 +153,7 @@ export default class adminCarOwners extends Vue {
 </script>
 <style lang='stylus' scoped>
 .wrapper
-  background-color: #fff
+  background-color #fff
 
 .add-user
   color #00f

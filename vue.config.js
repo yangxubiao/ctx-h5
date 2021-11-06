@@ -2,6 +2,11 @@
 const path = require('path');
 
 module.exports = {
+  publicPath: './',
+  productionSourceMap: false,
+  assetsDir: 'static',
+  indexPath: './index.html',
+  transpileDependencies: ['vant'],
   pages: {
     index: {
       // page 的入口

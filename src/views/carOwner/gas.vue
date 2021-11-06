@@ -17,7 +17,7 @@
       :finished="gasFinished"
       @load="onLoad"
       finished-text="没有更多了"
-      class="container"
+      class="container common-list"
     >
       <van-swipe-cell  
         v-for="(gasItem, gasIndex) in gasRecord"

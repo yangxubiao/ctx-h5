@@ -16,7 +16,7 @@
       v-model="rechargeLoading"
       :finished="rechargeFinished"
       @load="onLoad"
-      class="container"
+      class="container common-list"
     >
       <van-swipe-cell  
         v-for="(rechargeItem, rechargeIndex) in rechargesList"
@@ -159,7 +159,7 @@ export default class AdminRecharge extends Vue {
   }
 
   private manageOil() {
-    this.$router.push({ path: '/oil-clean-manage', query: {scene: 'add'}})
+    this.$router.push({ path: '/admin-oil-clean-manage', query: {scene: 'add'}})
   }
 
   private confirm(date: Date) {
@@ -262,7 +262,7 @@ export default class AdminRecharge extends Vue {
   }
 
   private editReachrgeItemById(id: string) {
-    this.$router.push({ path: '/oil-clean-manage', query: {id, scene: 'update'}})
+    this.$router.push({ path: '/admin-oil-clean-manage', query: {id, scene: 'update'}})
   }
 
   private settleChange(value: any) {

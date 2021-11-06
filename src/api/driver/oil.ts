@@ -4,7 +4,6 @@ import Ax from '@/utils/axios';
 export async function createOilRecord(
   parmas: any,
 ) {
-  console.log(parmas, 'parmas');
   const result = await Ax.post('/oil/createOilRecord', parmas);
   return result;
 }

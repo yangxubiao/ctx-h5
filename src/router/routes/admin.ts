@@ -52,16 +52,16 @@ export const adminRoutes: RouteCustom[] = [
     },
   },
   {
-    path: '/oil-clean',
-    name: 'oilClean',
+    path: '/admin-oil-clean',
+    name: 'adminOilClean',
     component: () => import(/* webpackChunkName: "oilClean" */ '@/views/admin/oilClean.vue'),
     meta: {
       title: '',
     },
   },
   {
-    path: '/oil-clean-manage',
-    name: 'oilCleanManage',
+    path: '/admin-oil-clean-manage',
+    name: 'adminOilCleanManage',
     component: () => import(/* webpackChunkName: "oilCleanManage" */ '@/views/admin/oilCleanManage.vue'),
     meta: {
       title: '',

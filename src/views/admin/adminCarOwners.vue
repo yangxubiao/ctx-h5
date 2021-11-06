@@ -1,7 +1,7 @@
 
 <template>
   <Loading v-if="loading" />
-  <div v-else class="wrapper">
+  <div v-else class="wrapper common-list">
     <van-swipe-cell
         v-for="(carsItem, carsIndex) in allCarsList"
         :key="carsIndex"

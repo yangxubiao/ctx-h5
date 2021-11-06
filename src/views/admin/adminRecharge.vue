@@ -16,7 +16,7 @@
       v-model="rechargeLoading"
       :finished="rechargeFinished"
       @load="onLoad"
-      class="container"
+      class="container common-list"
     >
       <van-swipe-cell  
         v-for="(rechargeItem, rechargeIndex) in rechargesList"

@@ -9,6 +9,7 @@
       v-model="userLoading"
       :finished="userFinished"
       @load="onLoad"
+      class="common-list"
     >
       <van-swipe-cell  
         v-for="(userItem, userIndex) in usersList"
