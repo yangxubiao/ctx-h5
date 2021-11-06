@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
+import { Toast } from 'vant';
 import { adminRoutes } from '@/router/routes/admin';
 import { carOwnerRoutes } from '@/router/routes/carOwner';
 import { driversRoutes } from '@/router/routes/driver';
@@ -43,6 +44,11 @@ router.beforeEach(async (to: any, from: any, next: any) => {
       加油工: 'oiler',
     };
     const userInfo = getLocalData('userInfo');
+    if (!userInfo) {
+      Toast('登录失效，请重新登录');
+      router.replace({ name: 'login' });
+      return;
+    }
     if (to.name.indexOf(routerJurisdictionMap[userInfo.roleName]) > -1) {
       next();
       return;
