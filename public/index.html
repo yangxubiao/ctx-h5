@@ -9,12 +9,29 @@
     <meta http-equiv="Expirse" content="0">
     <meta http-equiv="Pragma" content="no-cache">
     <title>车行通</title>
+    <% if (process.env.VUE_APP_VCONSOLE == 'open') {  %>
+      <script>
+        ;(function () {
+          // if (!/eruda=open/.test(window.location)) return;
+          var tmp = document.createElement('script');
+          tmp.type = 'text/javascript';
+          tmp.async = true;
+          tmp.src = 'https://cdn.staticfile.org/eruda/1.5.6/eruda.min.js';
+          tmp.onload = function() {
+            try {
+              window.eruda && window.eruda.init();
+            } catch (e) {}
+          }
+          var firstScript = document.getElementsByTagName('script')[0]
+          firstScript.parentElement.insertBefore(tmp, firstScript)
+        })();
+      </script>
+    <% } %>
   </head>
   <body>
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
-    <!-- built files will be auto injected -->
   </body>
 </html>
