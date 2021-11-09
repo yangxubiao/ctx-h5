@@ -15,10 +15,10 @@ service.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    console.log(config.data, 'request');
     if (config.url.indexOf('upload') > -1) {
       config.headers['Content-Type'] = 'multipart/form-data';
     }
-
     if (config?.data?.isEncrypt) {
       config.data.jsonObject = encryptToObj(config.data.jsonObject);
     }
@@ -43,6 +43,7 @@ service.interceptors.response.use(
         Toast(response?.data?.errorMas || '请稍后重试');
         return Promise.reject();
       }
+      console.log(response.data.result, 'response');
       return response.data.result;
     }
     return response;
