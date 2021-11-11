@@ -15,8 +15,9 @@
       </van-grid>
     </div>
     <div class="password">
-      <van-cell title="修改密码" is-link @click="jumpPage('password')" />
+      <van-cell class="updata-password" title="修改密码" is-link @click="jumpPage('password')" />
     </div>
+      <LoginOut />
   </div>
 </template>
 
@@ -28,8 +29,13 @@ import { getCurrentLoginederRechargesList } from '@/api/recharges'
 import { queryCarOwnerGasInfo } from '@/api/carOwner/summary'
 import tween from '@/utils/tween';
 import { stringToNumber } from '@/utils/string';
+import LoginOut from '@/components/loginOut.vue'
 
-@Component
+@Component({
+  components: {
+    LoginOut,
+  }
+})
 export default class CarOwnIndex extends Vue {
 
   private usersIcon = require('@/assets/svg/users.svg');

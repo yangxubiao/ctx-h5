@@ -12,6 +12,7 @@
     <div class="password">
       <van-cell title="修改密码" is-link @click="jumpPage('password')" />
     </div>
+    <LoginOut />
   </div>
 </template>
 
@@ -19,7 +20,13 @@
 import {
 Vue,  Component,
 } from 'vue-property-decorator';
-@Component
+import LoginOut from '@/components/loginOut.vue'
+
+@Component({
+  components: {
+    LoginOut
+  }
+})
 export default class adminIndex extends Vue {
 
   private usersIcon = require('@/assets/svg/users.svg');

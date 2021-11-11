@@ -7,6 +7,7 @@
       <van-cell class="cell-item" title="加油" is-link @click="jumpPage('driverGas')" />
       <van-cell class="cell-item"   title="修改密码" is-link @click="jumpPage('password')" />
     </div>
+    <LoginOut />
   </div>
 </template>
 
@@ -18,8 +19,13 @@ import { getCurrentLoginGasRecord } from '@/api/driver/oil'
 import tween from '@/utils/tween';
 import { stringToNumber } from '@/utils/string';
 import { BigNumber } from 'bignumber.js';
+import LoginOut from '@/components/loginOut.vue'
 
-@Component
+@Component({
+  components: {
+    LoginOut,
+  }
+})
 export default class DriverIndex extends Vue {
 
   //值

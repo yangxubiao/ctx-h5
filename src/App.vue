@@ -3,7 +3,6 @@
     <router-view />
     <van-tabbar v-if="isNotShowTabbar" v-model="active" class="tabbar">
       <van-tabbar-item   to="/" icon="home-o">首页</van-tabbar-item>
-      <van-tabbar-item  @click="loginOut"  to="/login" icon="circle">退出登录</van-tabbar-item>
     </van-tabbar>
   </div>
 </template>
@@ -21,16 +20,6 @@ export default class App extends Vue {
   private active: number = 0;
 
   private isNotShowTabbar: boolean = false;
-
-  private loginOut() {
-    setLocalData(
-      {
-        key: 'token',
-        value: null,
-      },
-    );
-    this.active = 0;
-  }
 
   @Watch('$route')
   private routerChange(to: any) {

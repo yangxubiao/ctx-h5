@@ -6,7 +6,9 @@
     <div class="container">
       <van-cell class="cell-item" title="加油记录" is-link @click="jumpPage('oilerGas')" />
       <van-cell class="cell-item"   title="修改密码" is-link @click="jumpPage('password')" />
+        <van-cell title="修改密码" is-link @click="jumpPage('login')" />
     </div>
+    <LoginOut />
   </div>
 </template>
 
@@ -19,8 +21,13 @@ import { getCurrentGasSiteRecord } from '@/api/oils/oil'
 import { BigNumber } from 'bignumber.js';
 import tween from '@/utils/tween';
 import { stringToNumber } from '@/utils/string';
+import LoginOut from '@/components/loginOut.vue'
 
-@Component
+@Component({
+  components: {
+    LoginOut
+  }
+})
 export default class OilerIndex extends Vue {
   //值
   private tweeningValue: string = '0'
