@@ -54,7 +54,7 @@ export default class adminIndex extends Vue {
     },
     {
       name: '加油',
-      page: 'adminAddCarOwner',
+      page: 'adminAddOil',
       img: this.oilsIcon,
     },
     {
