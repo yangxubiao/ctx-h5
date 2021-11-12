@@ -1,0 +1,32 @@
+<template>
+  <div>
+    <van-cell :title="pageInfo.title" is-link @click="jumpToPage" />
+  </div>
+</template>
+
+<script lang='ts'>
+import {
+  Vue,
+  Component,
+  Prop,
+} from 'vue-property-decorator';
+
+@Component
+export default class JumpToPageVue extends Vue {
+  @Prop({
+    type: Object,
+  })
+  private pageInfo: any;
+
+  private jumpToPage() {
+    this.$router.push({
+        name: this.pageInfo.name,
+    })
+  }
+
+  created() {
+    console.log(this.pageInfo, 'pageInfo');
+  }
+}
+
+</script>

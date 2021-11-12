@@ -50,7 +50,7 @@ export default class CarOwnIndex extends Vue {
   private grids = [
     {
       name: '驾驶员',
-      page: 'carDrives',
+      page: 'carManageDrives',
       img: this.usersIcon,
     },
     {

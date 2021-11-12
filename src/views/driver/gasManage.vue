@@ -39,6 +39,7 @@
   <div style="margin: 16px;">
     <van-button round block type="info" native-type="submit">提交</van-button>
   </div>
+  <JumpToPageVue :pageInfo="pageInfo"/>
 </van-form>
   </div>
 </template>
@@ -52,9 +53,21 @@ import { getCurrentUser } from '@/api/carOwner/users'
 import { createOilRecord } from '@/api/driver/oil'
 import { uploadFile } from '@/api/home'
 import debounce from 'lodash/debounce';
+import JumpToPageVue from '@/components/jumpToPage.vue'
 
-@Component
+@Component({
+  components: {
+    JumpToPageVue,
+  }
+})
 export default class GasVue extends Vue {
+
+  get pageInfo() {
+    return {
+      name: 'driverGas',
+      title: '加油记录'
+    }
+  }
 
   private showPicker: boolean = false
 

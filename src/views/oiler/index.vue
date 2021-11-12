@@ -6,7 +6,6 @@
     <div class="container">
       <van-cell class="cell-item" title="加油记录" is-link @click="jumpPage('oilerGas')" />
       <van-cell class="cell-item"   title="修改密码" is-link @click="jumpPage('password')" />
-        <van-cell title="修改密码" is-link @click="jumpPage('login')" />
     </div>
     <LoginOut />
   </div>

@@ -4,7 +4,7 @@
       加油总升数: {{ tweeningValue }}
     </div>
     <div class="container">
-      <van-cell class="cell-item" title="加油" is-link @click="jumpPage('driverGas')" />
+      <van-cell class="cell-item" title="加油" is-link @click="jumpPage('driverGasManage')" />
       <van-cell class="cell-item"   title="修改密码" is-link @click="jumpPage('password')" />
     </div>
     <LoginOut />

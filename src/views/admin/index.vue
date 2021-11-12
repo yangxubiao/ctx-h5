@@ -44,22 +44,22 @@ export default class adminIndex extends Vue {
   private grids = [
     {
       name: '用户',
-      page: 'adminUsers',
+      page: 'adminManageUsers',
       img: this.usersIcon,
     },
     {
       name: '车队',
-      page: 'adminCarOwners',
+      page: 'adminAddCarOwner',
       img: this.trucksIcon,
     },
     {
       name: '加油',
-      page: 'adminOil',
+      page: 'adminAddCarOwner',
       img: this.oilsIcon,
     },
     {
       name: '充值页',
-      page: 'adminRecharge',
+      page: 'adminManageRecharge',
       img: this.chargesIcon,
     },
     {
@@ -69,7 +69,7 @@ export default class adminIndex extends Vue {
     },
     {
       name: '加油点结清页',
-      page: 'adminOilClean',
+      page: 'adminOilCleanManage',
       img: this.oilCleanIcon,
     },
   ]

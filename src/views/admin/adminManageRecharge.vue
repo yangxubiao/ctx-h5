@@ -51,6 +51,7 @@
   <div style="margin: 16px;">
     <van-button round block type="info" native-type="submit">提交</van-button>
   </div>
+  <JumpToPageVue :pageInfo="pageInfo"/>
 </van-form>
 </div>
 </template>
@@ -63,9 +64,21 @@ import { getAllCarslist } from '@/api/users'
 import { BigNumber } from 'bignumber.js';
 import { createRecharge, getRechargeById, updateRecharge } from '@/api/recharges'
 import debounce from 'lodash/debounce';
+import JumpToPageVue from '@/components/jumpToPage.vue'
 
-@Component
+@Component({
+  components: {
+    JumpToPageVue,
+  }
+})
 export default class adminManageRecharge extends Vue {
+
+  get pageInfo() {
+    return {
+      name: 'adminRecharge',
+      title: '充值记录'
+    }
+  }
 
   private columns: any = [];
 
@@ -126,7 +139,7 @@ export default class adminManageRecharge extends Vue {
   }, 500)
 
   private async onSubmit() {
-    if (this.scene === 'add') {
+    if (this.scene !== 'update') {
       const result = await createRecharge({
         isEncrypt: true,
         jsonObject: this.formObj

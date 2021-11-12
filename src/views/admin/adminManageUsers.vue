@@ -104,6 +104,7 @@
   <div style="margin: 16px;">
     <van-button round block type="info" native-type="submit">提交</van-button>
   </div>
+  <JumpToPageVue :pageInfo="pageInfo"/>
 </van-form>
   </div>
 </template>
@@ -116,9 +117,21 @@ import { getAllCarsList } from '@/api/cars'
 import { getAllOilSitesList } from '@/api/oils'
 import { createUser, getUserById, updateUser } from '@/api/users'
 import debounce from 'lodash/debounce';
+import JumpToPageVue from '@/components/jumpToPage.vue'
 
-@Component
+@Component({
+  components: {
+    JumpToPageVue,
+  }
+})
 export default class adminRegister extends Vue {
+
+  get pageInfo() {
+    return {
+      name: 'adminUsers',
+      title: '用户记录'
+    }
+  }
 
   private showPicker: boolean = false
 
@@ -202,7 +215,7 @@ export default class adminRegister extends Vue {
 
   private async onSubmit() {
     const { confirmPassWord, ...rest } = this.formObj;
-    if (this.scene === 'add') {
+    if (this.scene !== 'update') {
       if (this.formObj.password.trim() !== this.formObj.confirmPassWord.trim()) {
         return this.$toast('密码不一致,请重新填写');
       }

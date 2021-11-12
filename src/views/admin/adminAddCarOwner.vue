@@ -24,6 +24,7 @@
       <div style="margin: 16px;">
         <van-button round block type="info" native-type="submit">提交</van-button>
       </div>
+      <JumpToPageVue :pageInfo="pageInfo"/>
     </van-form>
   </div>
 </template>
@@ -34,9 +35,21 @@ Vue,  Component,
 } from 'vue-property-decorator';
 import { createCarOwner } from '@/api/cars'
 import debounce from 'lodash/debounce';
+import JumpToPageVue from '@/components/jumpToPage.vue'
 
-@Component
+@Component({
+  components: {
+    JumpToPageVue,
+  }
+})
 export default class addCarOwner extends Vue {
+
+  get pageInfo() {
+    return {
+      name: 'adminCarOwners',
+      title: '车队记录'
+    }
+  }
   private formObj: any = {
     proxyFee: '',
     name: '',
