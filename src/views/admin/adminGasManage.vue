@@ -47,12 +47,11 @@
 import {
 Vue,  Component,
 } from 'vue-property-decorator';
-import { getAllOilSitesList } from '@/api/oils'
-import { getCurrentUser } from '@/api/carOwner/users'
-import { createOilRecord } from '@/api/driver/oil'
+import { getAllOilSitesList, updataOilRecord } from '@/api/oils'
 import { uploadFile } from '@/api/home'
 import debounce from 'lodash/debounce';
 import JumpToPageVue from '@/components/jumpToPage.vue'
+import { getOilRecordById } from '@/api/oils'
 
 @Component({
   components: {
@@ -63,7 +62,7 @@ export default class GasVue extends Vue {
 
   get pageInfo() {
     return {
-      name: 'driverGas',
+      name: 'adminGas',
       title: '加油记录'
     }
   }
@@ -95,6 +94,7 @@ export default class GasVue extends Vue {
     oilProxyFee: '', // (对于加油工必填）
     oilLnum: '', // 加油升数
     oilImg: '', // 加油图片
+    _id: "", // 加油记录Id
   }
 
   private throttleSubmit = debounce(() => {
@@ -115,16 +115,17 @@ export default class GasVue extends Vue {
   private async beforeCloseDialog(action: any, done: any) {
     if (action === 'confirm') {
         try {
-          await createOilRecord({
-          ...this.formObj,
+          await updataOilRecord({
+          isEncrypt: true,
+          jsonObject: this.formObj
         });
-        this.$toast('加油成功')
+        this.$toast('修改成功')
         done();
         this.$router.push({
-          name: 'driverGas'
+          name: 'adminGas'
         });
       } catch (error) {
-        this.$toast('加油失败')
+        this.$toast('修改失败')
         done();
       }
 
@@ -168,12 +169,9 @@ export default class GasVue extends Vue {
   }
 
   private async created() {
-    const result: any = await getCurrentUser();
-    this.formObj.carNo = result.carNo;
-    this.formObj.carName = result.carName;
-    this.formObj.carId = result.carId;
-    this.formObj.carProxyFee = result.carProxyFee;
-    this.formObj.userId = result._id;
+    const result: any = await getOilRecordById(this.$route.query.id as string);
+    const {updatedAt, createdAt, ...rest} = result
+    this.formObj = rest;
   }
 }
 

@@ -84,6 +84,14 @@ export const adminRoutes: RouteCustom[] = [
     },
   },
   {
+    path: '/admin-gas-manage',
+    name: 'adminGasManage',
+    component: () => import(/* webpackChunkName: "adminGasManage" */ '@/views/admin/adminGasManage.vue'),
+    meta: {
+      title: '',
+    },
+  },
+  {
     path: '/admin-users',
     name: 'adminUsers',
     component: () => import(/* webpackChunkName: "adminUsers" */ '@/views/admin/adminUsers.vue'),

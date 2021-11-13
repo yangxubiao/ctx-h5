@@ -8,7 +8,7 @@
     >
       <van-cell :title="carsItem.name" :value="'代价费: '+ carsItem.proxyFee + '毛'"/>
       <template #right>
-        <van-button square type="danger" text="删除" @click="delCarItemById(carsItem)" />
+        <!-- <van-button square type="danger" text="删除" @click="delCarItemById(carsItem)" /> -->
       </template>
     </van-swipe-cell>
     <div class="tips">

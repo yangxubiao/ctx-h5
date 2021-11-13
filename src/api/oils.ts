@@ -66,3 +66,15 @@ export async function getOilCleanRecordById(id: string) {
   return result;
 }
 
+// 根据 id 获取结清记录
+export async function getOilRecordById(id: string) {
+  const result = await Ax.get(`/oil/getOilRecordById/${id}`);
+  return result;
+}
+
+// 根据 id 获取结清记录
+export async function updataOilRecord(pramas: any) {
+  const result = await Ax.put('/oil/updataOilRecord', pramas);
+  return result;
+}
+

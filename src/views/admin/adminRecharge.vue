@@ -25,7 +25,7 @@
         <van-cell :title="rechargeItem.name" :value="rechargeItem.chargeTunnage + '吨'" :label="timeFormat(rechargeItem.createdAt, 'YYYY-MM-DD HH:mm:ss')"/>
         <template #right>
           <div class="more">
-            <van-button square type="danger" text="删除" @click="delRechargeItemById(rechargeItem)" />
+            <!-- <van-button square type="danger" text="删除" @click="delRechargeItemById(rechargeItem)" /> -->
             <van-button square type="primary" text="编辑" @click="editReachrgeItemById(rechargeItem._id)" />
           </div>
         </template>

@@ -23,8 +23,8 @@
     />
     <van-field 
       v-model="formObj.chargeTunnage" 
-      type="digit" 
-      label="吨数" 
+      type="number" 
+      label="吨数"
       @input="chargeTunnageInput"
       placeholder="请输入吨数"
       :rules="[{ required: true, message: '请输入吨数' }]"

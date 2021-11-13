@@ -33,16 +33,22 @@
                 <div>
                   {{gasItem.oilLnum + '升'}}
                 </div>
+                <div class="edit-gas-record" @click="editGasRecord(gasItem)">编辑</div>
               </div>
             </template>
                 <van-field label="车队名称" :value="gasItem.carName" readonly />
                 <van-field label="加油点" :value="gasItem.oilName" readonly />
                 <van-field label="加油时间" :value="timeFormat(gasItem.createdAt, 'YYYY年MM月DD号 HH:mm:ss')" readonly />
-                <van-field name="uploader" label="加油图片" readonly>
+                <van-field
+                  v-if="gasItem.oilImg"
+                  name="uploader" 
+                  label="加油图片"
+                  readonly
+                >
                   <template #input>
-                    <van-uploader 
+                    <van-uploader
                       v-model="gasItem.oilImg" 
-                      disabled 
+                      disabled
                       max-count="1"
                       :deletable="false"
                     />
@@ -148,6 +154,15 @@ export default class Gas extends Vue {
     this.oilList = await getAllOilSitesList();
   }
 
+  private editGasRecord(gasItem: any) {
+    this.$router.push({
+      name: 'adminGasManage',
+      query: {
+        id: gasItem._id
+      }
+    })
+  }
+
   private onLoad() {
     this.serachObj.queryPage+=1;
     this.getAllOilSitesList();
@@ -215,11 +230,13 @@ export default class Gas extends Vue {
         }
       });
       result = result.map((item: any) => {
-        item.oilImg = [
-          {
-            url: item.oilImg
-          }
-        ]
+        if (item.oilImg) {
+          item.oilImg = [
+            {
+              url: item.oilImg
+            }
+          ]
+        }
         return item;
       })
       if (isWhole) {
@@ -311,4 +328,7 @@ export default class Gas extends Vue {
   font-size 14px
   background-color #fff
   color #323233
+
+.edit-gas-record
+  color #00f
 </style>

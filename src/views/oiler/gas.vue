@@ -32,7 +32,12 @@
               </div>
             </template>
                 <van-field label="加油时间" :value="timeFormat(gasItem.createdAt, 'YYYY年MM月DD号 HH:mm:ss')" readonly />
-                <van-field name="uploader" label="加油图片" readonly>
+                <van-field
+                  v-if="gasItem.oilImg"
+                  name="uploader"
+                  label="加油图片"
+                  readonly
+                >
                   <template #input>
                     <van-uploader 
                       v-model="gasItem.oilImg" 
@@ -167,11 +172,13 @@ export default class Gas extends Vue {
         }
       });
       result = result.map((item: any) => {
-        item.oilImg = [
-          {
-            url: item.oilImg
-          }
-        ]
+        if (item.oilImg) {
+          item.oilImg = [
+            {
+              url: item.oilImg
+            }
+          ]
+        }
         return item;
       })
       if (isWhole) {
