@@ -10,7 +10,7 @@
         <span>{{timeFormat(nowDate, 'YYYY年MM月')}}</span>
         <van-icon name="arrow-down" />
       </div>
-      <span>{{getProxyPree}}</span>
+      <span>{{totalTunnage}}</span>
     </div>
     <van-list
       v-model="rechargeLoading"
@@ -90,10 +90,6 @@ export default class AdminRecharge extends Vue {
 
   private maxDate: Date = dayjs().toDate();
 
-  get getProxyPree() {
-    return this.settleCalue === '1' ? '' :  `应还代加费${this.shouldRepayAmount}元`
-  }
-
   private settleOption: any = [
     { text: '结清状态', value: '' },
     { text: '未结清', value: '0' },
@@ -111,22 +107,13 @@ export default class AdminRecharge extends Vue {
 
   // 总吨数
   get totalTunnage() {
-    const num = this.rechargesList.reduce((pre: any, next: any)=> {
-      return new BigNumber(pre).plus(next.chargeTunnage)
-    }, 0)
-    return num;
-  }
-
-  // 总应还代加金额
-  get shouldRepayAmount(){
-    const num = this.rechargesList.filter((item: any) => item.settleStatus === '0').reduce((pre: any, next: any)=> {
-      return (
-          (
-            new BigNumber(pre).plus(new BigNumber(next.chargeLnum).multipliedBy(next.proxyFee).div(10).toString())
-          ).toString()
-        )
-    },0)
-    return num;
+    if (this.rechargesList?.length) {
+      const num = this.rechargesList.reduce((pre: any, next: any)=> {
+        return new BigNumber(pre).plus(next.chargeTunnage)
+      }, 0)
+      return (`总共 ${num} 顿`);
+    }
+    return '';
   }
 
   private serachObj: any = {
