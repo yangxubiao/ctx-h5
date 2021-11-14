@@ -60,6 +60,10 @@ export default class addCarOwner extends Vue {
   }, 500)
 
   private async onSubmit() {
+    if (Number(this.formObj.proxyFee) <= 0) {
+      this.$toast('代加费不能小于0')
+      return;
+    }
     await createCarOwner({
       isEncrypt: true,
       jsonObject: this.formObj

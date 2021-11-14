@@ -1,5 +1,6 @@
 <template>
-  <div class="wrapper">
+  <Loading v-if="pageLoading" />
+  <div v-else class="wrapper">
     <van-form @submit="throttleSubmit" class="container">
   <van-field
     v-model="formObj.name"
@@ -75,10 +76,12 @@ import { createUser, getUserById, updateUser } from '@/api/users'
 import { getCurrentUser } from '@/api/carOwner/users'
 import debounce from 'lodash/debounce';
 import JumpToPageVue from '@/components/jumpToPage.vue'
+import Loading from '@/components/loading.vue';
 
 @Component({
   components: {
-    JumpToPageVue
+    JumpToPageVue,
+    Loading
   }
 })
 export default class adminRegister extends Vue {
@@ -89,6 +92,8 @@ export default class adminRegister extends Vue {
       title: '驾驶员记录'
     }
   }
+
+  private pageLoading: boolean = false
 
   private showPicker: boolean = false
 
@@ -196,6 +201,7 @@ export default class adminRegister extends Vue {
   private async created() {
     if (this.scene === 'update') {
       const result = await getUserById((this.$route.query.id as string));
+      this.pageLoading = false;
       this.formObj = result;
     } else {
       this.currentUserInfo =  await getCurrentUser();

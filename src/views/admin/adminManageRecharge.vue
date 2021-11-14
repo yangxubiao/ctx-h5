@@ -139,6 +139,10 @@ export default class adminManageRecharge extends Vue {
   }, 500)
 
   private async onSubmit() {
+    if (Number(this.formObj.chargeTunnage) <= 0) {
+      this.$toast('顿数不能小于0')
+      return;
+    }
     if (this.scene !== 'update') {
       const result = await createRecharge({
         isEncrypt: true,

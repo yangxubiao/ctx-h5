@@ -80,7 +80,6 @@ service.interceptors.response.use(
     if (error?.response?.status === 500) {
       Toast('服务器出错');
     }
-
     return Promise.reject(error);
   },
 );

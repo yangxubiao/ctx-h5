@@ -102,6 +102,10 @@ export default class GasVue extends Vue {
   }, 500)
 
   private async onSubmit() {
+    if (Number(this.formObj.oilLnum) <= 0) {
+      this.$toast('加油升数不能小于0')
+      return;
+    }
     // if (!this.formObj.oilImg) {
     //   this.$toast('加油图片未上传')
     // }
@@ -124,7 +128,6 @@ export default class GasVue extends Vue {
           name: 'driverGas'
         });
       } catch (error) {
-        this.$toast('加油失败')
         done();
       }
 

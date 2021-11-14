@@ -1,5 +1,9 @@
 <template>
-  <div class="wrapper">
+  <Loading v-if="pageLoading" />
+  <div
+    v-else
+    class="wrapper"
+  >
   <van-form @submit="throttleSubmit" class="container">
   <van-field
     readonly
@@ -52,10 +56,12 @@ import { uploadFile } from '@/api/home'
 import debounce from 'lodash/debounce';
 import JumpToPageVue from '@/components/jumpToPage.vue'
 import { getOilRecordById } from '@/api/oils'
+import Loading from '@/components/loading.vue';
 
 @Component({
   components: {
     JumpToPageVue,
+    Loading,
   }
 })
 export default class GasVue extends Vue {
@@ -66,6 +72,8 @@ export default class GasVue extends Vue {
       title: '加油记录'
     }
   }
+
+  private pageLoading: boolean = false
 
   private showPicker: boolean = false
 
@@ -105,6 +113,14 @@ export default class GasVue extends Vue {
     // if (!this.formObj.oilImg) {
     //   this.$toast('加油图片未上传')
     // }
+    if (Number(this.formObj.oilLnum) <= 0) {
+      this.$toast('加油升数不能小于0')
+      return;
+    }
+    if(!this.uploader.length) {
+      this.formObj.oilImg = '';
+    }
+
     this.$dialog.confirm({
       title: '',
       message: `<div>加油点: <span class="oil-text">${this.formObj.oilName} </span></div><div>加油升数: <span class="oil-text">${this.formObj.oilLnum}</span> 升 ?</div>`,
@@ -115,7 +131,7 @@ export default class GasVue extends Vue {
   private async beforeCloseDialog(action: any, done: any) {
     if (action === 'confirm') {
         try {
-          await updataOilRecord({
+        await updataOilRecord({
           isEncrypt: true,
           jsonObject: this.formObj
         });
@@ -125,7 +141,6 @@ export default class GasVue extends Vue {
           name: 'adminGas'
         });
       } catch (error) {
-        this.$toast('修改失败')
         done();
       }
 
@@ -171,7 +186,15 @@ export default class GasVue extends Vue {
   private async created() {
     const result: any = await getOilRecordById(this.$route.query.id as string);
     const {updatedAt, createdAt, ...rest} = result
+    if (rest.oilImg) {
+      this.uploader = [
+          {
+            url: rest.oilImg
+          }
+      ]
+    }
     this.formObj = rest;
+    this.pageLoading = false;
   }
 }
 
