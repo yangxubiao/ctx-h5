@@ -19,6 +19,12 @@ export default class LoginOutVue extends Vue {
         value: null,
       },
     );
+    setLocalData(
+      {
+        key: 'userInfo',
+        value: null,
+      },
+    );
     this.$router.replace({
       name: 'login'
     })

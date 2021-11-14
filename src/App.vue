@@ -13,7 +13,6 @@ import {
   Component,
   Watch
 } from 'vue-property-decorator';
-import { setLocalData } from './utils/local';
 @Component
 export default class App extends Vue {
 

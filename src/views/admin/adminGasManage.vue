@@ -153,7 +153,8 @@ export default class GasVue extends Vue {
     files.status = 'uploading';
     files.message = '上传中...';
     var formData = new FormData();
-    formData.append("file", files.file);
+    const newFile: any = await (this as any).$compression(files.file);
+    formData.append("file", newFile.file);
     const result: any = await uploadFile(formData)
     files.status = 'done';
     this.formObj.oilImg = result.url;

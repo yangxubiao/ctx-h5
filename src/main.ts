@@ -29,6 +29,7 @@ import router from './router';
 import store from './store';
 import '@/utils/axios';
 import '@/utils/encrypt';
+import '@/utils/compressionImg';
 import 'assets/css/global.css';
 import 'vant/lib/index.css';
 

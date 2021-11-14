@@ -70,6 +70,13 @@ export default class Password extends Vue {
       },
     );
 
+    setLocalData(
+      {
+        key: 'userInfo',
+        value: null,
+      },
+    );
+
     this.$router.replace({
       name: 'login'
     })
