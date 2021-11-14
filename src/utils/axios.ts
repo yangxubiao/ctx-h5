@@ -57,8 +57,8 @@ service.interceptors.response.use(
     }
 
     if (error?.response?.status === 403) {
-      Toast('登录失效，请重新登录');
-      Router.replace({ name: 'login' });
+      // Toast('登录失效，请重新登录');
+      Router.replace({ name: 'index' });
     }
 
     if (error?.response?.status === 404) {

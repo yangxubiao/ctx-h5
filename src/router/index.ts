@@ -12,6 +12,11 @@ Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [
   {
     path: '/',
+    name: 'index',
+    component: () => import(/* webpackChunkName: "home" */ '@/views/newHome.vue'),
+  },
+  {
+    path: '/home',
     name: 'home',
     component: () => import(/* webpackChunkName: "home" */ '@/views/home.vue'),
   },
@@ -36,7 +41,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to: any, from: any, next: any) => {
-  if (!['login', 'home', 'password'].includes(to.name)) {
+  if (!['login', 'home', 'password', 'index'].includes(to.name)) {
     const routerJurisdictionMap: any = {
       管理员: 'admin',
       车队: 'car',
@@ -45,8 +50,8 @@ router.beforeEach(async (to: any, from: any, next: any) => {
     };
     const userInfo = getLocalData('userInfo');
     if (!userInfo) {
-      Toast('登录失效，请重新登录');
-      router.replace({ name: 'login' });
+      // Toast('登录失效，请重新登录');
+      router.replace({ name: 'index' });
       return;
     }
     if (to.name.indexOf(routerJurisdictionMap[userInfo.roleName]) > -1) {

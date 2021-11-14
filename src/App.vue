@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <router-view />
-    <van-tabbar v-if="isNotShowTabbar" v-model="active" class="tabbar">
+    <!-- <van-tabbar v-if="isNotShowTabbar" v-model="active" class="tabbar">
       <van-tabbar-item   to="/" icon="home-o">首页</van-tabbar-item>
-    </van-tabbar>
+    </van-tabbar> -->
   </div>
 </template>
 
