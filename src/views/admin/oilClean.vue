@@ -111,7 +111,7 @@ export default class AdminRecharge extends Vue {
       const num = this.rechargesList.reduce((pre: any, next: any)=> {
         return new BigNumber(pre).plus(next.chargeTunnage)
       }, 0)
-      return (`总共 ${num} 顿`);
+      return (`总共 ${num} 吨`);
     }
     return '';
   }

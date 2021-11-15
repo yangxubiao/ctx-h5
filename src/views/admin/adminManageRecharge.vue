@@ -140,7 +140,7 @@ export default class adminManageRecharge extends Vue {
 
   private async onSubmit() {
     if (Number(this.formObj.chargeTunnage) <= 0) {
-      this.$toast('顿数不能小于0')
+      this.$toast('吨数不能小于0')
       return;
     }
     if (this.scene !== 'update') {
