@@ -1,6 +1,6 @@
 <template>
-  <div class="bg">
-    旅游日记，待开发
+  <div>
+    旅游日记
   </div>
 </template>
 
@@ -13,8 +13,3 @@ import {
 export default class newHome extends Vue {
 }
 </script>
-<style>
-  .bg{
-    background-color: #fff;
-  }
-</style>
