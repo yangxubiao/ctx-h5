@@ -64,7 +64,7 @@ export default class Login extends Vue {
         value: result.token,
       },
     );
-    this.$router.replace({name: 'home'});
+    this.$router.replace({path: '/'});
   }
 
 }
