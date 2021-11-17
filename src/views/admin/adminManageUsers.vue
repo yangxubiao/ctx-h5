@@ -214,27 +214,45 @@ export default class adminRegister extends Vue {
   }, 500)
 
   private async onSubmit() {
-    const { confirmPassWord, ...rest } = this.formObj;
     if (this.scene !== 'update') {
       if (this.formObj.password.trim() !== this.formObj.confirmPassWord.trim()) {
         return this.$toast('密码不一致,请重新填写');
       }
-      const result = await createUser({
-        isEncrypt: true,
-        jsonObject: rest
-      })
-      this.$toast('添加成功');
-    } else {
-      const result = await updateUser({
-        isEncrypt: true,
-        jsonObject: rest
-      })
     }
-    this.$toast('编辑成功');
-    this.$router.push({
-      name: 'adminUsers'
+    this.$dialog.confirm({
+      title: '',
+      message: `<div>${this.scene !== 'update' ? '添加' : '修改'} <span class="focus-text">${this.formObj.name}</span> 吗?</div>`,
+      beforeClose: this.beforeCloseDialog,
     })
+  }
 
+  private async beforeCloseDialog(action: any, done: any) {
+    const { confirmPassWord, ...rest } = this.formObj;
+    if (action === 'confirm') {
+      try {
+        if (this.scene !== 'update') {
+          const result = await createUser({
+            isEncrypt: true,
+            jsonObject: rest
+          })
+          this.$toast('添加成功');
+        } else {
+          const result = await updateUser({
+            isEncrypt: true,
+            jsonObject: rest
+          })
+        }
+        done();
+        this.$toast('编辑成功');
+        this.$router.push({
+          name: 'adminUsers'
+        })
+      } catch (error) {
+        done();
+      }
+    } else {
+      done();
+    }
   }
 
   //  当前角色
@@ -338,4 +356,10 @@ export default class adminRegister extends Vue {
 
 .container
   width 90%
+</style>
+<style lang='stylus'>
+.focus-text
+  color #f00
+  font-size 18px
+  font-weight bold
 </style>

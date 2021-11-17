@@ -23,10 +23,6 @@ export default class JumpToPageVue extends Vue {
         name: this.pageInfo.name,
     })
   }
-
-  created() {
-    console.log(this.pageInfo, 'pageInfo');
-  }
 }
 
 </script>

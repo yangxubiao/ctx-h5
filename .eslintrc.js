@@ -16,7 +16,7 @@ module.exports = {
     'no-console': 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     "max-len": ["warn", {
-      "code": 200,
+      "code": 220,
       "tabWidth": 2,
       "ignoreComments": true,
       "ignoreTemplateLiterals": true,

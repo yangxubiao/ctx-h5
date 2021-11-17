@@ -15,7 +15,6 @@ service.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    console.log(config.data, 'request');
     if (config.url.indexOf('upload') > -1) {
       config.headers['Content-Type'] = 'multipart/form-data';
     }
@@ -43,15 +42,12 @@ service.interceptors.response.use(
         Toast(response?.data?.errorMas || '请稍后重试');
         return Promise.reject();
       }
-      console.log(response.data.result, 'response');
       return response.data.result;
     }
     return response;
   },
 
   error => {
-    console.log(error?.response, 'error?.response?.status');
-
     if (error?.response?.status === 401) {
       Toast(error?.response?.data?.message || '用户名或密码不正确');
     }

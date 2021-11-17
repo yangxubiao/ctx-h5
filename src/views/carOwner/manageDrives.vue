@@ -145,34 +145,54 @@ export default class adminRegister extends Vue {
   }, 500)
 
   private async onSubmit() {
-    const { confirmPassWord, ...rest } = this.formObj;
     if (this.scene !== 'update') {
       if (this.formObj.password.trim() !== this.formObj.confirmPassWord.trim()) {
         return this.$toast('密码不一致,请重新填写');
       }
-      await createUser({
-        isEncrypt: true,
-        jsonObject: {
-          ...rest,
-          carId: this.currentUserInfo.carId,
-          carName: this.currentUserInfo.carName,
-          carProxyFee: this.currentUserInfo.carProxyFee,
-          gasId:  this.currentUserInfo.gasId,
-          gasName: this.currentUserInfo.gasName,
-          gasProxyFee: this.currentUserInfo.gasProxyFee,
-        }
-      })
-    } else {
-      await updateUser({
-        isEncrypt: true,
-        jsonObject: rest
-      })
     }
-
-    this.$router.push({
-      name: 'carDrives'
+    this.$dialog.confirm({
+      title: '',
+      message: `<div>${this.scene !== 'update' ? '添加' : '修改'} <span class="focus-text">${this.formObj.name}</span> 吗?</div>`,
+      beforeClose: this.beforeCloseDialog,
     })
+  }
 
+  private async beforeCloseDialog(action: any, done: any) {
+    const { confirmPassWord, ...rest } = this.formObj;
+    if (action === 'confirm') {
+      try {
+        const { confirmPassWord, ...rest } = this.formObj;
+        if (this.scene !== 'update') {
+          await createUser({
+            isEncrypt: true,
+            jsonObject: {
+              ...rest,
+              carId: this.currentUserInfo.carId,
+              carName: this.currentUserInfo.carName,
+              carProxyFee: this.currentUserInfo.carProxyFee,
+              gasId:  this.currentUserInfo.gasId,
+              gasName: this.currentUserInfo.gasName,
+              gasProxyFee: this.currentUserInfo.gasProxyFee,
+            }
+          })
+          this.$toast('添加成功');
+        } else {
+          await updateUser({
+            isEncrypt: true,
+            jsonObject: rest
+          })
+          this.$toast('编辑成功');
+        }
+        done();
+        this.$router.push({
+          name: 'carDrives'
+        })
+      } catch (error) {
+        done();
+      }
+    } else {
+      done();
+    }
   }
 
   //  当前角色
@@ -219,4 +239,10 @@ export default class adminRegister extends Vue {
 
 .container
   width 90%
+</style>
+<style lang='stylus'>
+.focus-text
+  color #f00
+  font-size 18px
+  font-weight bold
 </style>

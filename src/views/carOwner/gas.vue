@@ -11,6 +11,7 @@
         <span>{{timeFormat(nowDate, 'YYYY年MM月')}}</span>
         <van-icon name="arrow-down" />
       </div>
+      <span>{{getTotalLnum}}</span>
     </div>
     <van-list
       v-model="gasLoading"
@@ -85,6 +86,7 @@ import Loading from '@/components/loading.vue';
 import pickBy from 'lodash/pickBy';
 import { getAllOilSitesList } from '@/api/oils'
 import { getCurrentUserAllDrivesList } from '@/api/carOwner/users'
+import BigNumber from 'bignumber.js';
 
 @Component({
   components: {
@@ -132,6 +134,16 @@ export default class Gas extends Vue {
         value: item._id
       }))
     ];
+  }
+
+  get getTotalLnum() {
+    if (this.gasRecord?.length) {
+      const num = this.gasRecord.reduce((pre: any, next: any)=> {
+        return new BigNumber(pre).plus(next.oilLnum)
+      }, 0)
+      return ('总共' + num + '升');
+    }
+    return '';
   }
 
   get drivesOption() {

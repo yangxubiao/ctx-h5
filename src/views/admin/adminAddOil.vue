@@ -65,16 +65,32 @@ export default class addCarOwner extends Vue {
       this.$toast('代加费不能小于0')
       return;
     }
-    await createOilSite({
-      isEncrypt: true,
-      jsonObject: this.formObj
-    });
-    this.$toast('添加成功');
-    this.$router.push({
-      name: 'adminOil'
+    this.$dialog.confirm({
+      title: '',
+      message: `<div>确认要添加: <span class="focus-text">${this.formObj.name}</span></div><div>代加费为: <span class="focus-text">${this.formObj.proxyFee}</span> 毛 ?</div>`,
+      beforeClose: this.beforeCloseDialog,
     })
   }
 
+  private async beforeCloseDialog(action: any, done: any) {
+    if (action === 'confirm') {
+      try {
+        await createOilSite({
+          isEncrypt: true,
+          jsonObject: this.formObj
+        });
+        this.$toast('添加成功');
+        done();
+        this.$router.push({
+          name: 'adminOil'
+        })
+      } catch (error) {
+        done();
+      }
+    } else {
+      done();
+    }
+  }
 }
 
 </script>
@@ -90,4 +106,10 @@ export default class addCarOwner extends Vue {
 
 .field
   margin-top 20px
+</style>
+<style lang='stylus'>
+.focus-text
+  color #f00
+  font-size 18px
+  font-weight bold
 </style>

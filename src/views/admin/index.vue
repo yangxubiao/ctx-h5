@@ -68,7 +68,7 @@ export default class adminIndex extends Vue {
       img: this.recordsIcon,
     },
     {
-      name: '加油点结清页',
+      name: ' 进油记录页',
       page: 'adminOilCleanManage',
       img: this.oilCleanIcon,
     },

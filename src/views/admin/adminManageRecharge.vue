@@ -143,22 +143,39 @@ export default class adminManageRecharge extends Vue {
       this.$toast('吨数不能小于0')
       return;
     }
-    if (this.scene !== 'update') {
-      const result = await createRecharge({
-        isEncrypt: true,
-        jsonObject: this.formObj
-      });
-      this.$toast('添加成功')
-    } else {
-      const result = await updateRecharge({
-        isEncrypt: true,
-        jsonObject: this.formObj
-      })
-      this.$toast('编辑成功')
-    }
-    this.$router.push({
-      name: 'adminRecharge'
+    this.$dialog.confirm({
+      title: '',
+      message: `<div>确认要给: <span class="focus-text">${this.formObj.carName}</span></div><div>${this.scene !== 'update' ? '充值' : '修改为'}: <span class="focus-text">${this.formObj.chargeTunnage}</span>吨吗?</div>`,
+      beforeClose: this.beforeCloseDialog,
     })
+  }
+
+  private async beforeCloseDialog(action: any, done: any) {
+    if (action === 'confirm') {
+      try {
+        if (this.scene !== 'update') {
+          const result = await createRecharge({
+            isEncrypt: true,
+            jsonObject: this.formObj
+          });
+          this.$toast('添加成功')
+        } else {
+          const result = await updateRecharge({
+            isEncrypt: true,
+            jsonObject: this.formObj
+          })
+          this.$toast('编辑成功')
+        }
+        done();
+        this.$router.push({
+          name: 'adminRecharge'
+        })
+      } catch (error) {
+        done();
+      }
+    } else {
+      done();
+    }
   }
 
   private onConfirm(obj: any) {
@@ -202,4 +219,10 @@ export default class adminManageRecharge extends Vue {
 
 .container
   width 90%
+</style>
+<style lang='stylus'>
+.focus-text
+  color #f00
+  font-size 18px
+  font-weight bold
 </style>
