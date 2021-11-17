@@ -35,7 +35,7 @@ export default class OilerIndex extends Vue {
    * 数字每一帧滚动触发的回调
    */
   updateValue(tweenobj: { object: { tweeningValue: string } }) {
-    this.tweeningValue = stringToNumber(tweenobj.object.tweeningValue).toFixed(0);
+    this.tweeningValue = stringToNumber(tweenobj.object.tweeningValue).toFixed(2);
   }
 
   private gasSiteRecord: any = [];
