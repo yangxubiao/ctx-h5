@@ -1,6 +1,9 @@
 <template>
     <div class="wrapper">
-    <div class="lnum">
+    <div class="lnum" v-if="isPrivateCar">
+      我的升数: {{ tweeningValue }}
+    </div>
+    <div class="lnum" v-else>
       加油总升数: {{ tweeningValue }}
     </div>
     <div class="container">
@@ -20,6 +23,8 @@ import tween from '@/utils/tween';
 import { stringToNumber } from '@/utils/string';
 import { BigNumber } from 'bignumber.js';
 import LoginOut from '@/components/loginOut.vue'
+import { getLocalData } from '@/utils/local';
+import { queryCarOwnerGasInfo } from '@/api/carOwner/summary'
 
 @Component({
   components: {
@@ -32,6 +37,14 @@ export default class DriverIndex extends Vue {
   private tweeningValue: string = '0'
 
   private gasRecord: any = [];
+
+  private isPrivateCar: boolean = false;
+
+  private gasInfo: any = null;
+
+  get avaliableLnum() {
+    return this.gasInfo?.avaliableLnum || 0;
+  }
 
   /**
    * 数字每一帧滚动触发的回调
@@ -59,8 +72,28 @@ export default class DriverIndex extends Vue {
     tween(0, this.totalLum, this.updateValue);
   }
 
+  private async privateCarData() {
+    this.isPrivateCar = true;
+    const userInfo = getLocalData('userInfo');
+    const gasInfo = await queryCarOwnerGasInfo({
+      isEncrypt: true,
+      jsonObject: {
+        carId: userInfo.carId,
+        carName: userInfo.carName,
+      }
+    });
+    this.gasInfo = gasInfo;
+    // 动画开始
+    tween(0, this.avaliableLnum, this.updateValue);
+  }
+
   private mounted() {
-    this.getCurrentLoginGasRecord();
+    const userInfo = getLocalData('userInfo');
+    if (userInfo.carName.indexOf('私人车队') !== -1) {
+    this.privateCarData();
+    } else {
+      this.getCurrentLoginGasRecord();
+    }
   }
 
   private jumpPage(str: string) {

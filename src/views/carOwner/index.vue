@@ -30,6 +30,7 @@ import { queryCarOwnerGasInfo } from '@/api/carOwner/summary'
 import tween from '@/utils/tween';
 import { stringToNumber } from '@/utils/string';
 import LoginOut from '@/components/loginOut.vue'
+import { getLocalData } from '@/utils/local';
 
 @Component({
   components: {
@@ -83,7 +84,14 @@ export default class CarOwnIndex extends Vue {
   }
 
   private async mounted() {
-    const gasInfo = await queryCarOwnerGasInfo();
+    const userInfo = getLocalData('userInfo');
+    const gasInfo = await queryCarOwnerGasInfo({
+      isEncrypt: true,
+      jsonObject: {
+        carId: userInfo.carId,
+        carName: userInfo.carName,
+      }
+    });
     this.gasInfo = gasInfo;
     // 动画开始
     tween(0, this.avaliableLnum, this.updateValue);
