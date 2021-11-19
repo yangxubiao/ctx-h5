@@ -46,7 +46,7 @@ router.beforeEach(async (to: any, from: any, next: any) => {
     const userInfo = getLocalData('userInfo');
     if (!userInfo) {
       Toast('登录失效，请重新登录');
-      router.replace({ name: 'login' });
+      router.replace({ name: 'login', query: to.query });
       return;
     }
     if (to.name.indexOf(routerJurisdictionMap[userInfo.roleName]) > -1) {

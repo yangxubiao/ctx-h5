@@ -33,11 +33,12 @@
 
 <script lang='ts'>
 import {
-Vue,  Component,
+Vue,  Component
 } from 'vue-property-decorator';
 import { login } from '@/api/users'
 import { setLocalData } from '@/utils/local'
 import debounce from 'lodash/debounce';
+import { getCurrentUser } from '@/api/carOwner/users'
 
 @Component
 export default class Login extends Vue {
@@ -64,7 +65,23 @@ export default class Login extends Vue {
         value: result.token,
       },
     );
-    this.$router.replace({path: '/'});
+    const userInfo: {
+      [key: string]: any;
+    } = await getCurrentUser();
+    setLocalData(
+        {
+          key: 'userInfo',
+          value: userInfo,
+        },
+    );
+    if (this.$route?.query?.toPage) {
+      this.$router.replace({
+        name: (this.$route.query.toPage as string),
+        query: this.$route.query
+      });
+    } else {
+      this.$router.replace({path: '/'});
+    }
   }
 
 }

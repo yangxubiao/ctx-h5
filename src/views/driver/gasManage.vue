@@ -1,5 +1,6 @@
 <template>
-  <div class="wrapper">
+  <Loading v-if="pageLoading" />
+  <div v-else class="wrapper">
   <van-form @submit="throttleSubmit" class="container">
   <van-field
     readonly
@@ -8,6 +9,7 @@
     :value="formObj.oilName"
     label="加油点"
     placeholder="点击选择加油点"
+    :disabled="isFromScan"
     @click="handlerPicker"
     :rules="[{ required: true, message: '请选择加油点' }]"
   />
@@ -53,10 +55,13 @@ import { createOilRecord } from '@/api/driver/oil'
 import { uploadFile } from '@/api/home'
 import debounce from 'lodash/debounce';
 import JumpToPageVue from '@/components/jumpToPage.vue'
+import { getUserById } from '@/api/users'
+import Loading from '@/components/loading.vue';
 
 @Component({
   components: {
     JumpToPageVue,
+    Loading,
   }
 })
 export default class GasVue extends Vue {
@@ -67,6 +72,8 @@ export default class GasVue extends Vue {
       title: '加油记录'
     }
   }
+
+  private pageLoading: boolean = true
 
   private showPicker: boolean = false
 
@@ -153,6 +160,10 @@ export default class GasVue extends Vue {
   }
 
   private async handlerPicker() {
+    if (this.isFromScan) {
+      this.$toast('扫码不能手动修改加油点')
+      return;
+    }
     this.columns = [];
     this.loading = true;
     this.showPicker = !this.showPicker;
@@ -170,14 +181,24 @@ export default class GasVue extends Vue {
     this.columns = result;
     this.loading = false;
   }
+  get isFromScan() {
+    return (this.$route.query?.userId && this.$route.query?.toPage === 'driverGasManage')
+  }
 
   private async created() {
+    if (this.isFromScan) {
+      const gasInfo: any = await getUserById((this.$route.query.userId as string));
+      this.formObj.oilName = gasInfo.gasName;
+      this.formObj.oilId = gasInfo.gasId;
+      this.formObj.oilProxyFee = gasInfo.gasProxyFee;
+    }
     const result: any = await getCurrentUser();
     this.formObj.carNo = result.carNo;
     this.formObj.carName = result.carName;
     this.formObj.carId = result.carId;
     this.formObj.carProxyFee = result.carProxyFee;
     this.formObj.userId = result._id;
+    this.pageLoading = false;
   }
 }
 

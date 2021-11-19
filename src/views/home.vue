@@ -11,13 +11,13 @@ import { setLocalData } from '@/utils/local'
 @Component
 export default class Home extends Vue {
   private async created() {
-    const {_id, ...rest}: {
+    const result: {
       [key: string]: any;
     } = await getCurrentUser();
     setLocalData(
         {
           key: 'userInfo',
-          value: rest,
+          value: result,
         },
     );
     const routerMap: any = {
@@ -27,7 +27,7 @@ export default class Home extends Vue {
       '3': 'oiler',
     };
     this.$router.replace({
-      name: routerMap[rest['roleNo']]
+      name: routerMap[result['roleNo']]
     })
   }
 }
