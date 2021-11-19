@@ -1,5 +1,6 @@
 <template>
-<div class="wrapper">
+  <Loading v-if="pageLoading" />
+<div  v-else class="wrapper">
     <van-form @submit="throttleSubmit" class="container">
     <van-field
       readonly
@@ -65,10 +66,12 @@ import { BigNumber } from 'bignumber.js';
 import { createOilCleanRecord, getOilCleanRecordById, updateOilCleanRecord } from '@/api/oils'
 import debounce from 'lodash/debounce';
 import JumpToPageVue from '@/components/jumpToPage.vue'
+import Loading from '@/components/loading.vue';
 
 @Component({
   components: {
     JumpToPageVue,
+    Loading,
   }
 })
 export default class adminManageRecharge extends Vue {
@@ -79,6 +82,8 @@ export default class adminManageRecharge extends Vue {
       title: '加油点结清记录'
     }
   }
+
+  private pageLoading: boolean = true
 
   private columns: any = [];
 
@@ -189,6 +194,7 @@ export default class adminManageRecharge extends Vue {
       const result: any = await getOilCleanRecordById((this.$route.query.id as string));
       this.formObj = result;
     }
+    this.pageLoading = false;
   }
 }
 

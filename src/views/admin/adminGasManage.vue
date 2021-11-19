@@ -73,7 +73,7 @@ export default class GasVue extends Vue {
     }
   }
 
-  private pageLoading: boolean = false
+  private pageLoading: boolean = true
 
   private showPicker: boolean = false
 

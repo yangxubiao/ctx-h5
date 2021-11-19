@@ -113,6 +113,7 @@ export default class CarOwnIndex extends Vue {
   flexStyle(flexDirection: column, justifyContent: space-around)
 
 .lnum
+  font-size 28px
   color #fff
 
 .container

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-Vue.prototype.$compression = (file: any, size = 20, device = 4) => {
+Vue.prototype.$compression = (file: any, size = 20, device = 3) => {
   if (file[0]) {
     return Promise.all(Array.from(file).map(e => Vue.prototype.$compression(e, size))); // 如果是 file 数组返回 Promise 数组
   }

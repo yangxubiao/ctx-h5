@@ -1,5 +1,6 @@
 <template>
-  <div class="wrapper">
+  <Loading v-if="pageLoading" />
+  <div  v-else class="wrapper">
   <van-form @submit="throttleSubmit" class="container">
   <van-field
     v-model="formObj.name"
@@ -118,10 +119,12 @@ import { getAllOilSitesList } from '@/api/oils'
 import { createUser, getUserById, updateUser } from '@/api/users'
 import debounce from 'lodash/debounce';
 import JumpToPageVue from '@/components/jumpToPage.vue'
+import Loading from '@/components/loading.vue';
 
 @Component({
   components: {
     JumpToPageVue,
+    Loading,
   }
 })
 export default class adminRegister extends Vue {
@@ -134,6 +137,8 @@ export default class adminRegister extends Vue {
   }
 
   private showPicker: boolean = false
+
+  private pageLoading: boolean = true;
 
   private loading: boolean = false
 
@@ -343,6 +348,7 @@ export default class adminRegister extends Vue {
       const result = await getUserById((this.$route.query.id as string));
       this.formObj = result;
     }
+    this.pageLoading = false;
   }
 }
 

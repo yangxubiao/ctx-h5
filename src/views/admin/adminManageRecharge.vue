@@ -1,5 +1,6 @@
 <template>
-<div class="wrapper">
+  <Loading v-if="pageLoading" />
+<div v-else class="wrapper">
     <van-form @submit="throttleSubmit" class="container">
     <van-field
       readonly
@@ -7,6 +8,7 @@
       name="picker"
       :value="formObj.name"
       label="车队负责人"
+      class="field"
       placeholder="点击选择车队负责人"
       @click="handlerPicker('1')"
       :rules="[{ required: true, message: '请选择车队负责人' }]"
@@ -17,6 +19,7 @@
       name="picker"
       :value="formObj.carName"
       label="车队名"
+      class="field"
       placeholder="车队名"
       @click="handlerPicker('2')"
       :rules="[{ required: true, message: '请选择车队名' }]"
@@ -25,6 +28,7 @@
       v-model="formObj.chargeTunnage" 
       type="number" 
       label="吨数"
+      class="field"
       @input="chargeTunnageInput"
       placeholder="请输入吨数"
       :rules="[{ required: true, message: '请输入吨数' }]"
@@ -32,6 +36,7 @@
     <van-field
       readonly
       clickable
+      class="field"
       name="picker"
       :value="formObj.settleName"
       label="结清状态"
@@ -65,10 +70,12 @@ import { BigNumber } from 'bignumber.js';
 import { createRecharge, getRechargeById, updateRecharge } from '@/api/recharges'
 import debounce from 'lodash/debounce';
 import JumpToPageVue from '@/components/jumpToPage.vue'
+import Loading from '@/components/loading.vue';
 
 @Component({
   components: {
     JumpToPageVue,
+    Loading,
   }
 })
 export default class adminManageRecharge extends Vue {
@@ -82,7 +89,9 @@ export default class adminManageRecharge extends Vue {
 
   private columns: any = [];
 
-  private loading: boolean = false
+  private loading: boolean = false;
+
+  private pageLoading: boolean = true;
 
   private defaultRoleColumns() {
     return [{
@@ -206,6 +215,7 @@ export default class adminManageRecharge extends Vue {
       const result: any = await getRechargeById((this.$route.query.id as string));
       this.formObj = result;
     }
+    this.pageLoading = false;
   }
 }
 

@@ -32,6 +32,7 @@ import '@/utils/encrypt';
 import '@/utils/compressionImg';
 import 'assets/css/global.css';
 import 'vant/lib/index.css';
+import 'vant/lib/index.less';
 
 Vue.use(Tabbar);
 Vue.use(TabbarItem);

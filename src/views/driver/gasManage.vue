@@ -3,11 +3,13 @@
   <div v-else class="wrapper">
   <van-form @submit="throttleSubmit" class="container">
   <van-field
+    v-if="!isFromScan"
     readonly
     clickable
     name="picker"
     :value="formObj.oilName"
     label="加油点"
+    class="field"
     placeholder="点击选择加油点"
     :disabled="isFromScan"
     @click="handlerPicker"
@@ -17,12 +19,14 @@
     v-model="formObj.oilLnum" 
     type="number" 
     label="加油升数" 
+    class="field"
     placeholder="请输入加油升数"
     :rules="[{ required: true, message: '请输入加油升数' }]"
   />
   <van-field 
     name="uploader" 
     label="加油图片"
+    class="field"
   >
   <template #input>
     <van-uploader max-count='1' v-model="uploader" :after-read="afterRead"/>
@@ -102,6 +106,7 @@ export default class GasVue extends Vue {
     oilProxyFee: '', // (对于加油工必填）
     oilLnum: '', // 加油升数
     oilImg: '', // 加油图片
+    phone: '', // 手机号
   }
 
   private throttleSubmit = debounce(() => {
@@ -198,6 +203,7 @@ export default class GasVue extends Vue {
     this.formObj.carId = result.carId;
     this.formObj.carProxyFee = result.carProxyFee;
     this.formObj.userId = result._id;
+    this.formObj.phone = result.phone;
     this.pageLoading = false;
   }
 }
@@ -212,6 +218,9 @@ export default class GasVue extends Vue {
 
 .container
   width 90%
+
+.field
+  margin-top 20px
 </style>
 <style lang='stylus'>
 .oil-text

@@ -83,6 +83,7 @@ export default class OilerIndex extends Vue {
   flexStyle(flexDirection: column)
 
 .lnum
+  font-size 28px
   color #fff
 
 .container

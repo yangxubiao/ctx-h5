@@ -38,6 +38,7 @@
               </div>
             </template>
                 <van-field label="车队名称" :value="gasItem.carName" readonly />
+                <van-field label="手机号" :value="gasItem.phone" readonly />
                 <van-field label="加油点" :value="gasItem.oilName" readonly />
                 <van-field label="加油时间" :value="timeFormat(gasItem.createdAt, 'YYYY年MM月DD号 HH:mm:ss')" readonly />
                 <van-field
@@ -338,7 +339,7 @@ export default class Gas extends Vue {
 .form-date
   flexStyle(justifyContent: space-between)
   padding 16px
-  font-size 14px
+  font-size 18px
   background-color #fff
   color #323233
 

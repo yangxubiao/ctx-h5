@@ -297,7 +297,7 @@ export default class AdminRecharge extends Vue {
 .form-date
   flexStyle(justifyContent: space-between)
   padding 16px
-  font-size 14px
+  font-size 18px
   background-color #fff
   color #323233
 </style>
