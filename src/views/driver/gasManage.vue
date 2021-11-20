@@ -59,8 +59,9 @@ import { createOilRecord } from '@/api/driver/oil'
 import { uploadFile } from '@/api/home'
 import debounce from 'lodash/debounce';
 import JumpToPageVue from '@/components/jumpToPage.vue'
-import { getUserById } from '@/api/users'
+import { getUserById, updateUser } from '@/api/users'
 import Loading from '@/components/loading.vue';
+import BigNumber from 'bignumber.js';
 
 @Component({
   components: {
@@ -93,7 +94,9 @@ export default class GasVue extends Vue {
 
   private uploader1: any =[];
 
-  private  value: string = ''
+  private value: string = ''
+
+  private userInfo: any = {};
 
   private formObj: any = {
     userId: '', // 用户id
@@ -107,6 +110,7 @@ export default class GasVue extends Vue {
     oilLnum: '', // 加油升数
     oilImg: '', // 加油图片
     phone: '', // 手机号
+    gasMode: '', // 加油模式
   }
 
   private throttleSubmit = debounce(() => {
@@ -121,6 +125,13 @@ export default class GasVue extends Vue {
     // if (!this.formObj.oilImg) {
     //   this.$toast('加油图片未上传')
     // }
+    if (this.userInfo?.gasMode === 'divide') {
+        if (new BigNumber(this.userInfo?.availableLum || 0).minus(this.formObj.oilLnum).toNumber() < 0) {
+          this.$toast('可用升数不足，请先充值 !')
+          return;
+        }
+    }
+
     this.$dialog.confirm({
       title: '',
       message: `<div>加油点: <span class="oil-text">${this.formObj.oilName} </span></div><div>加油升数: <span class="oil-text">${this.formObj.oilLnum}</span> 升 ?</div>`,
@@ -131,7 +142,16 @@ export default class GasVue extends Vue {
   private async beforeCloseDialog(action: any, done: any) {
     if (action === 'confirm') {
         try {
-          await createOilRecord({
+        if (this.userInfo?.gasMode === 'divide') {
+          const result = await updateUser({
+            isEncrypt: true,
+            jsonObject: {
+              _id: this.userInfo?._id,
+              availableLum: (new BigNumber(this.userInfo?.availableLum || 0).minus(this.formObj.oilLnum).toFixed(2).toString()),
+            }
+          })
+        }
+        await createOilRecord({
           ...this.formObj,
         });
         this.$toast('加油成功')
@@ -142,7 +162,6 @@ export default class GasVue extends Vue {
       } catch (error) {
         done();
       }
-
     } else {
       done();
     }
@@ -198,11 +217,13 @@ export default class GasVue extends Vue {
       this.formObj.oilProxyFee = gasInfo.gasProxyFee;
     }
     const result: any = await getCurrentUser();
+    this.userInfo = result;
     this.formObj.carNo = result.carNo;
     this.formObj.carName = result.carName;
     this.formObj.carId = result.carId;
     this.formObj.carProxyFee = result.carProxyFee;
     this.formObj.userId = result._id;
+    this.formObj.gasMode = result.gasMode;
     this.formObj.phone = result.phone;
     this.pageLoading = false;
   }

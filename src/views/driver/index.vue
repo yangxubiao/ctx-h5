@@ -24,7 +24,6 @@ import { stringToNumber } from '@/utils/string';
 import { BigNumber } from 'bignumber.js';
 import LoginOut from '@/components/loginOut.vue'
 import { getLocalData } from '@/utils/local';
-import { queryCarOwnerGasInfo } from '@/api/carOwner/summary'
 
 @Component({
   components: {
@@ -72,25 +71,15 @@ export default class DriverIndex extends Vue {
     tween(0, this.totalLum, this.updateValue);
   }
 
-  private async privateCarData() {
+  private handleDivideMode(avaliableLnum: number) {
     this.isPrivateCar = true;
-    const userInfo = getLocalData('userInfo');
-    const gasInfo = await queryCarOwnerGasInfo({
-      isEncrypt: true,
-      jsonObject: {
-        carId: userInfo.carId,
-        carName: userInfo.carName,
-      }
-    });
-    this.gasInfo = gasInfo;
-    // 动画开始
-    tween(0, this.avaliableLnum, this.updateValue);
+    tween(0, avaliableLnum, this.updateValue);
   }
 
   private mounted() {
     const userInfo = getLocalData('userInfo');
-    if (userInfo.carName.indexOf('私人车队') !== -1) {
-    this.privateCarData();
+    if(userInfo.gasMode === 'divide') {
+      this.handleDivideMode(new BigNumber(userInfo.availableLum).toNumber());
     } else {
       this.getCurrentLoginGasRecord();
     }

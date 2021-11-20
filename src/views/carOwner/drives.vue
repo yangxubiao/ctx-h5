@@ -17,7 +17,7 @@
       >
         <van-cell :title="userItem.name " :value="userItem.phone" />
         <template #right>
-          <!-- <van-button square type="danger" text="删除" @click="delUserItemById(userItem)" /> -->
+          <van-button square type="danger" text="删除" @click="delUserItemById(userItem)" />
           <van-button square type="primary" text="编辑" @click="editUserItemById(userItem._id)" />
         </template>
       </van-swipe-cell>

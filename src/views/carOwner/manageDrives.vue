@@ -27,6 +27,17 @@
     :rules="[{ required: true, message: '请选择冻结状态' }]"
   />
   <van-field
+    readonly
+    clickable
+    name="picker"
+    :value="formObj.gasModeName"
+    label="加油模式"
+    placeholder="加油模式"
+    @click="handlerPicker('12')"
+    class="field"
+    :rules="[{ required: true, message: '请选择加油模式' }]"
+  />
+  <van-field
     v-if="scene !== 'update'"
     v-model="formObj.password"
     type="password"
@@ -103,21 +114,44 @@ export default class adminRegister extends Vue {
 
   private currentUserInfo: any;
 
-  private defaultRoleColumns() {
-    return [{
-      text: '未冻结',
-      value: {
-        freeName: '未冻结',
-        freeStatus: '0',
-      }
-    },
-    {
-      text: '已冻结',
-      value: {
-        freeName: '已冻结',
-        freeStatus: '1',
-      }
-    }]
+  private defaultRoleColumns(str: string) {
+    let list: any = [];
+    switch (str) {
+      case '10':
+        list = [{
+          text: '未冻结',
+          value: {
+            freeName: '未冻结',
+            freeStatus: '0',
+          }
+        },
+        {
+          text: '已冻结',
+          value: {
+            freeName: '已冻结',
+            freeStatus: '1',
+          }
+        }]
+        break;
+      default:
+        list = [{
+          text: '分油',
+          value: {
+            gasModeName: '分油',
+            gasMode: 'divide',
+          }
+        },
+        {
+          text: '共享',
+          value: {
+            gasModeName: '共享',
+            gasMode: 'public',
+          }
+        }]
+        break;
+    }
+
+    return list;
   }
 
   get dynamicColumns() {
@@ -134,6 +168,9 @@ export default class adminRegister extends Vue {
     password: '', // 必填
     confirmPassWord: '', // 必填
     roleName: '驾驶员', // 必填
+    gasMode: '', // 加油模式, 针对驾驶员必填
+    gasModeName: '', // 加油模式名称, 针对驾驶员必填
+    availableLum: '0', // 可用升数， 针对驾驶员
     roleNo: '2', // 必填
     carNo: '', // 车牌号
     carName: '', // (对与驾驶员和车老板必填)
@@ -209,7 +246,7 @@ export default class adminRegister extends Vue {
     this.columns = [];
     this.loading = true;
     this.showPicker = !this.showPicker;
-    let result: any = this.defaultRoleColumns();
+    let result: any = this.defaultRoleColumns(str);
     this.columns = result;
     this.loading = false;
   }

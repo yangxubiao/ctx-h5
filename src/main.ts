@@ -23,6 +23,8 @@ import {
   CollapseItem,
   Tabbar,
   TabbarItem,
+  Tabs,
+  Tab,
 } from 'vant';
 import App from './App.vue';
 import router from './router';
@@ -34,6 +36,8 @@ import 'assets/css/global.css';
 import 'vant/lib/index.css';
 import 'vant/lib/index.less';
 
+Vue.use(Tab);
+Vue.use(Tabs);
 Vue.use(Tabbar);
 Vue.use(TabbarItem);
 Vue.use(Collapse);

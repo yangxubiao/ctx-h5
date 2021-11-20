@@ -4,13 +4,13 @@
       我的升数: {{ tweeningValue }}
     </div>
     <div class="container">
-      <van-grid :column-num="3" :gutter="20">
+      <van-grid :column-num="2" :gutter="20">
           <van-grid-item
             v-for="(gridItem, gridIndex) in grids"
             :key="gridIndex"
-            :icon="gridItem.img" 
+            :icon="gridItem.img"
             @click='jumpPage(gridItem.page)' 
-            :text="gridItem.name" 
+            :text="gridItem.name"
           />
       </van-grid>
     </div>
@@ -45,6 +45,8 @@ export default class CarOwnIndex extends Vue {
 
   private chargesIcon = require('@/assets/svg/charges.svg');
 
+  private oilsIcon = require('@/assets/svg/oils.svg');
+
   // 额度值
   private tweeningValue: string = '0'
 
@@ -53,6 +55,11 @@ export default class CarOwnIndex extends Vue {
       name: '驾驶员',
       page: 'carManageDrives',
       img: this.usersIcon,
+    },
+    {
+      name: '分油管理',
+      page: 'carOilDivideManage',
+      img: this.oilsIcon,
     },
     {
       name: '加油记录页',

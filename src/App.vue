@@ -22,7 +22,7 @@ export default class App extends Vue {
 
   @Watch('$route')
   private routerChange(to: any) {
-    this.isNotShowTabbar = !(['login', 'admin', 'carOwner', 'driver', 'oiler'].includes(to.name))
+    this.isNotShowTabbar = !(['login', 'admin', 'carOwner', 'driver', 'oiler', 'carOilDivideManage'].includes(to.name))
   }
 }
 </script>

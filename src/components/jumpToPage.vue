@@ -26,12 +26,3 @@ export default class JumpToPageVue extends Vue {
 }
 
 </script>
-
-<style lang="stylus" scoped>
-.jump-to-page {
-  position: fixed;
-  bottom 80px;
-  left 20px;
-  right 20px;
-}
-</style>

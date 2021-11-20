@@ -18,3 +18,9 @@ export async function getCurrentUser() {
   const result = await Ax.post('/users/getCurrentUser');
   return result;
 }
+
+// 批量更改用户
+export async function updateMany(pramas: any) {
+  const result = await Ax.post('/users/updateMany', pramas);
+  return result;
+}

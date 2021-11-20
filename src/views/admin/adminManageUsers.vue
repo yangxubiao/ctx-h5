@@ -86,6 +86,18 @@
   />
   <van-field
     v-if="currentRole === '2'"
+    readonly
+    clickable
+    name="picker"
+    :value="formObj.gasModeName"
+    label="加油模式"
+    placeholder="加油模式"
+    @click="handlerPicker('12')"
+    class="field"
+    :rules="[{ required: true, message: '请选择加油模式' }]"
+  />
+  <van-field
+    v-if="currentRole === '2'"
     v-model="formObj.carNo"
     name="车牌号"
     label="车牌号"
@@ -105,8 +117,8 @@
   <div style="margin: 16px;">
     <van-button round block type="info" native-type="submit">提交</van-button>
   </div>
+  </van-form>
   <JumpToPageVue :pageInfo="pageInfo"/>
-</van-form>
   </div>
 </template>
 
@@ -145,49 +157,73 @@ export default class adminRegister extends Vue {
   private columns: any = [];
 
   private defaultRoleColumns(str: string) {
-    return (str === '10' ?
-    [{
-      text: '未冻结',
-      value: {
-        freeName: '未冻结',
-        freeStatus: '0',
-      }
-    },
-    {
-      text: '已冻结',
-      value: {
-        freeName: '已冻结',
-        freeStatus: '1',
-      }
-    }] :
-    [{
-      text: '管理员',
-      value: {
-        roleName: '管理员',
-        roleNo: '0',
-      }
-    },
-    {
-      text: '车队',
-      value: {
-        roleName: '车队',
-        roleNo: '1',
-      }
-    },
-    {
-      text: '驾驶员',
-      value: {
-        roleName: '驾驶员',
-        roleNo: '2',
-      }
-    },
-    {
-      text: '加油工',
-      value: {
-        roleName: '加油工',
-        roleNo: '3',
-      }
-    }])
+    let list: any = [];
+    switch (str) {
+      case '10':
+        list = [{
+          text: '未冻结',
+          value: {
+            freeName: '未冻结',
+            freeStatus: '0',
+          }
+        },
+        {
+          text: '已冻结',
+          value: {
+            freeName: '已冻结',
+            freeStatus: '1',
+          }
+        }]
+        break;
+      case '11':
+        list = [{
+          text: '管理员',
+          value: {
+            roleName: '管理员',
+            roleNo: '0',
+          }
+          },
+          {
+            text: '车队',
+            value: {
+              roleName: '车队',
+              roleNo: '1',
+            }
+          },
+          {
+            text: '驾驶员',
+            value: {
+              roleName: '驾驶员',
+              roleNo: '2',
+            }
+          },
+          {
+            text: '加油工',
+            value: {
+              roleName: '加油工',
+              roleNo: '3',
+            }
+          }]
+        break;
+      default:
+        list = [{
+          text: '分油',
+          value: {
+            gasModeName: '分油',
+            gasMode: 'divide',
+          }
+        },
+        {
+          text: '共享',
+          value: {
+            gasModeName: '共享',
+            gasMode: 'public',
+          }
+        }]
+        break;
+    }
+
+    return list;
   }
 
   get dynamicColumns() {
@@ -206,6 +242,9 @@ export default class adminRegister extends Vue {
     roleName: '', // 必填
     roleNo: '', // 必填
     carNo: '', // 车牌号
+    gasMode: '', // 加油模式, 针对驾驶员必填
+    gasModeName: '', // 加油模式名称, 针对驾驶员必填
+    availableLum: '0', // 可用升数， 针对驾驶员
     carName: '', // (对与驾驶员和车老板必填)
     carId: '', // (对与驾驶员和车老板必填)
     carProxyFee: '', //  (车老板必填)
@@ -246,9 +285,9 @@ export default class adminRegister extends Vue {
             isEncrypt: true,
             jsonObject: rest
           })
+          this.$toast('编辑成功');
         }
         done();
-        this.$toast('编辑成功');
         this.$router.push({
           name: 'adminUsers'
         })
@@ -356,9 +395,9 @@ export default class adminRegister extends Vue {
 <style lang='stylus' scoped>
 @import '~@/stylus/mixin.styl'
 .wrapper
-  height 100%
+  height 80%
   width 100%
-  flexStyle(flexDirection: column)
+  flexStyle(flexDirection: column, justifyContent: space-around)
 
 .container
   width 90%

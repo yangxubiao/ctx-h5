@@ -57,6 +57,8 @@ import debounce from 'lodash/debounce';
 import JumpToPageVue from '@/components/jumpToPage.vue'
 import { getOilRecordById } from '@/api/oils'
 import Loading from '@/components/loading.vue';
+import BigNumber from 'bignumber.js';
+import { getUserById, updateUser } from '@/api/users'
 
 @Component({
   components: {
@@ -89,6 +91,10 @@ export default class GasVue extends Vue {
 
   private uploader1: any =[];
 
+  private userInfo: any = {};
+
+  private lastOilLum: string = '0';
+
   private  value: string = ''
 
   private formObj: any = {
@@ -103,6 +109,7 @@ export default class GasVue extends Vue {
     oilLnum: '', // 加油升数
     oilImg: '', // 加油图片
     _id: "", // 加油记录Id
+    gasMode: '', // 加油模式
   }
 
   private throttleSubmit = debounce(() => {
@@ -121,6 +128,13 @@ export default class GasVue extends Vue {
       this.formObj.oilImg = '';
     }
 
+      if (this.formObj?.gasMode === 'divide') {
+        if (new BigNumber(this.userInfo?.availableLum || 0).plus(this.lastOilLum).minus(this.formObj.oilLnum).toNumber() < 0) {
+          this.$toast('可用升数不足，请先充值 !')
+          return;
+        }
+    }
+
     this.$dialog.confirm({
       title: '',
       message: `<div>加油点: <span class="oil-text">${this.formObj.oilName} </span></div><div>加油升数: <span class="oil-text">${this.formObj.oilLnum}</span> 升 ?</div>`,
@@ -130,7 +144,16 @@ export default class GasVue extends Vue {
 
   private async beforeCloseDialog(action: any, done: any) {
     if (action === 'confirm') {
-        try {
+      try {
+        if (this.userInfo?.gasMode === 'divide') {
+          const result = await updateUser({
+            isEncrypt: true,
+            jsonObject: {
+              _id: this.userInfo?._id,
+              availableLum: (new BigNumber(this.userInfo?.availableLum || 0).plus(this.lastOilLum).minus(this.formObj.oilLnum).toFixed(2).toString()),
+            }
+          })
+        }
         await updataOilRecord({
           isEncrypt: true,
           jsonObject: this.formObj
@@ -186,7 +209,9 @@ export default class GasVue extends Vue {
 
   private async created() {
     const result: any = await getOilRecordById(this.$route.query.id as string);
-    const {updatedAt, createdAt, ...rest} = result
+    const {updatedAt, createdAt, ...rest} = result;
+    this.lastOilLum = rest.oilLnum;
+    this.userInfo = await getUserById(result.userId)
     if (rest.oilImg) {
       this.uploader = [
           {
