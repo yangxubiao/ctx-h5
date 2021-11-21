@@ -19,4 +19,13 @@ export const oilersRoutes: RouteCustom[] = [
       title: '',
     },
   },
+  {
+    path: '/oiler-pay-oil-qr',
+    name: 'oilerPayOilQr',
+    component: () => import(/* webpackChunkName: "payOilQr" */ '@/views/oiler/payOilQr.vue'),
+    meta: {
+      title: '',
+    },
+  },
+
 ];

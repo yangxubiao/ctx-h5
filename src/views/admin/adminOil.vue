@@ -6,10 +6,23 @@
         v-for="(oilItem, oilIndex) in allOilList"
         :key="oilIndex"
     >
-      <van-cell :title="oilItem.name" :value="'代价费: '+ oilItem.proxyFee + '毛'"/>
-      <template #right>
-        <!-- <van-button square type="danger" text="删除" @click="delOilItemById(oilItem)" /> -->
-      </template>
+      <van-collapse v-model="activeName">
+          <van-collapse-item :name="oilIndex">
+            <template #title>
+              <div class="title">
+                <div>
+                  {{oilItem.gasName}}
+                </div>
+                <div>
+                  代价费: {{oilItem.gasProxyFee}} 毛
+                </div>
+              </div>
+            </template>
+            <div class="qr">
+              <vue-qr colorDark="#4994df"  :text="getQrInfo(oilItem._id)" :size="200"></vue-qr>
+            </div>
+          </van-collapse-item>
+        </van-collapse>
     </van-swipe-cell>
     <div class="tips">
       没有更多了, <span @click="addGasSite" class="add-gas">点击这里添加更多加油点</span>
@@ -21,30 +34,24 @@
 import {
 Vue,  Component,
 } from 'vue-property-decorator';
-import { getAllOilSitesList, delOilItemById } from '@/api/oils'
+import { delOilItemById } from '@/api/oils'
+import { getAllUserList } from '@/api/users'
 import Loading from '@/components/loading.vue';
+import VueQr from 'vue-qr'
 
 @Component({
   components: {
     Loading,
+    VueQr,
   }
 })
 export default class AdminOil extends Vue {
 
   private loading: boolean = true;
 
+  private activeName: string[] = [];
+
   private allOilList: any = [];
-
-  private async created() {
-    const result =  await getAllOilSitesList();
-    this.allOilList = result
-    this.loading = false;
-  }
-
-  private async getAllOilSitesList() {
-    const result = await getAllOilSitesList();
-    this.allOilList = result
-  }
 
   private async delOilItemById(oilItem: any) {
     this.$dialog.confirm({
@@ -54,7 +61,6 @@ export default class AdminOil extends Vue {
     .then(async () => {
       await delOilItemById(oilItem._id);
       this.$toast('删除成功')
-      this.getAllOilSitesList();
     }).catch(()=>{})
   }
 
@@ -62,12 +68,30 @@ export default class AdminOil extends Vue {
     this.$router.push({ path: '/admin-add-oil'})
   }
 
+  private getQrInfo(id: string) {
+    return (process.env.VUE_APP_API_SCAN_GALLING_LINK + id)
+  }
+
+  private async mounted() {
+    const result =  await getAllUserList({
+      isWhole: true,
+      roleNo: '3',
+    });
+    this.allOilList = result
+    this.loading = false;
+  }
 }
 
 </script>
 <style lang='stylus' scoped>
+@import '~@/stylus/mixin.styl'
+
 .wrapper
   background-color #fff
+
+.title
+  flexStyle(justifyContent: space-between)
+  margin-right 10px
 
 .add-gas
   color #00f
@@ -77,4 +101,7 @@ export default class AdminOil extends Vue {
   font-size 16px
   text-align center
   padding 12px
+
+.qr
+  flexStyle()
 </style>

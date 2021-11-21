@@ -23,3 +23,5 @@ interface ResponseData<T = any> {
 }
 
 declare module 'es6-tween'
+
+declare module 'vue-qr'
