@@ -11,6 +11,7 @@
     </div> -->
     <div class="container">
       <van-cell class="cell-item" title="加油" is-link @click="jumpPage('driverGasManage')" />
+      <van-cell class="cell-item" title="加油点信息" is-link @click="jumpPage('driverGasInfo')" />
       <van-cell class="cell-item"   title="修改密码" is-link @click="jumpPage('password')" />
     </div>
     <LoginOut />

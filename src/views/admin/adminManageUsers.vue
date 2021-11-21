@@ -118,7 +118,7 @@
     <van-button round block type="info" native-type="submit">提交</van-button>
   </div>
   </van-form>
-  <JumpToPageVue :pageInfo="pageInfo"/>
+  <JumpToPageVue :pageInfo="pageInfo" class="jump-to-page"/>
   </div>
 </template>
 
@@ -414,6 +414,9 @@ export default class adminRegister extends Vue {
   flexStyle(flexDirection: column, justifyContent: space-around)
 
 .container
+  width 90%
+
+.jump-to-page
   width 90%
 </style>
 <style lang='stylus'>

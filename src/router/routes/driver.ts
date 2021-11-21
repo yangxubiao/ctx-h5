@@ -20,6 +20,14 @@ export const driversRoutes: RouteCustom[] = [
     },
   },
   {
+    path: '/driver-gas-info',
+    name: 'driverGasInfo',
+    component: () => import(/* webpackChunkName: "gasInfo" */ '@/views/driver/gasInfo.vue'),
+    meta: {
+      title: '',
+    },
+  },
+  {
     path: '/driver-gas-manage',
     name: 'driverGasManage',
     component: () => import(/* webpackChunkName: "driverGasManage" */ '@/views/driver/gasManage.vue'),
