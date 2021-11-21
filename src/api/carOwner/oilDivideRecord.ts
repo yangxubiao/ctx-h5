@@ -8,7 +8,6 @@ export async function insertMany(pramas: any) {
 
 export async function getOilDivideRecord(pramas: any) {
   const { perPage = 10, queryPage = 1, ...rest } = pramas.jsonObject;
-  console.log(pramas, 'pramas');
   const result = await Ax.post(`/oilDivideRecord/getOilDivideRecord?per_page=${perPage}&query_page=${queryPage}`, rest);
   return result;
 }
