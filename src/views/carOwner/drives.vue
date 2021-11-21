@@ -15,7 +15,9 @@
         v-for="(userItem, userIndex) in usersList"
         :key="userIndex"
       >
-        <van-cell :title="userItem.name " :value="userItem.phone" />
+        <van-cell :title="userItem.name">
+          <a :href="'tel:'+userItem.phone">{{ userItem.phone }}</a>
+        </van-cell>
         <template #right>
           <van-button square type="danger" text="删除" @click="delUserItemById(userItem)" />
           <van-button square type="primary" text="编辑" @click="editUserItemById(userItem._id)" />

@@ -38,7 +38,6 @@
               </div>
             </template>
                 <van-field label="车队名称" :value="gasItem.carName" readonly />
-                <van-field label="手机号" :value="gasItem.phone" readonly />
                 <van-field label="加油点" :value="gasItem.oilName" readonly />
                 <van-field label="加油时间" :value="timeFormat(gasItem.createdAt, 'YYYY年MM月DD号 HH:mm:ss')" readonly />
                 <van-field
@@ -54,6 +53,11 @@
                       max-count="1"
                       :deletable="false"
                     />
+                  </template>
+                </van-field>
+                <van-field label="手机号" readonly>
+                  <template #input>
+                      <a :href="'tel:'+gasItem.phone">{{ gasItem.phone }}</a>
                   </template>
                 </van-field>
           </van-collapse-item>
