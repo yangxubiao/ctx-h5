@@ -1,8 +1,15 @@
 import Ax from '@/utils/axios';
 
 // 获取当前用户下的所有驾驶员
-// eslint-disable-next-line import/prefer-default-export
 export async function insertMany(pramas: any) {
   const result = await Ax.post('/oilDivideRecord/insertMany', pramas);
   return result;
 }
+
+export async function getOilDivideRecord(pramas: any) {
+  const { perPage = 10, queryPage = 1, ...rest } = pramas.jsonObject;
+  console.log(pramas, 'pramas');
+  const result = await Ax.post(`/oilDivideRecord/getOilDivideRecord?per_page=${perPage}&query_page=${queryPage}`, rest);
+  return result;
+}
+

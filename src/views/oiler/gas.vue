@@ -7,6 +7,7 @@
         <span>{{timeFormat(nowDate, 'YYYY年MM月')}}</span>
         <van-icon name="arrow-down" />
       </div>
+      <span>{{getTotalLnum}}</span>
     </div>
     <van-list
       v-model="gasLoading"
@@ -73,11 +74,11 @@
 import {
 Vue,  Component,
 } from 'vue-property-decorator';
-import { getCurrentLoginGasRecord } from '@/api/driver/oil'
 import { getCurrentGasSiteRecord } from '@/api/oils/oil'
 import dayjs from 'dayjs';
 import Loading from '@/components/loading.vue';
 import pickBy from 'lodash/pickBy';
+import BigNumber from 'bignumber.js';
 
 @Component({
   components: {
@@ -119,7 +120,17 @@ export default class Gas extends Vue {
     this.getAllOilSitesList();
   }
 
-    private serachObj: any = {
+  get getTotalLnum() {
+    if (this.gasRecord?.length) {
+      const num = this.gasRecord.reduce((pre: any, next: any)=> {
+        return new BigNumber(pre).plus(next.oilLnum)
+      }, 0)
+      return ('总共' + num + '升');
+    }
+    return '';
+  }
+
+  private serachObj: any = {
     perPage: 10,
     queryPage: 1,
     userId: '', // 用户id

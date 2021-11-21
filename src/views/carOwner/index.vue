@@ -1,5 +1,8 @@
 <template>
   <div class="wrapper">
+    <div class="logo-text">
+      车行通
+    </div>
     <div class="lnum">
       我的升数: {{ tweeningValue }}
     </div>

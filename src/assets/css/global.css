@@ -61,3 +61,8 @@ a:active{
   padding-bottom: env(safe-area-inset-bottom);
   padding-bottom: 50px;
 }
+
+.logo-text {
+  font-size: 50px;
+  color: #ffffff;
+}

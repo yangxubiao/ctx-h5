@@ -1,11 +1,14 @@
 <template>
-    <div class="wrapper">
+  <div class="wrapper">
+    <div class="logo-text">
+      车行通
+    </div>
     <div class="lnum" v-if="isPrivateCar">
       我的升数: {{ tweeningValue }}
     </div>
-    <div class="lnum" v-else>
+    <!-- <div class="lnum" v-else>
       加油总升数: {{ tweeningValue }}
-    </div>
+    </div> -->
     <div class="container">
       <van-cell class="cell-item" title="加油" is-link @click="jumpPage('driverGasManage')" />
       <van-cell class="cell-item"   title="修改密码" is-link @click="jumpPage('password')" />
@@ -18,7 +21,7 @@
 import {
 Vue,  Component,
 } from 'vue-property-decorator';
-import { getCurrentLoginGasRecord } from '@/api/driver/oil'
+// import { getCurrentLoginGasRecord } from '@/api/driver/oil'
 import tween from '@/utils/tween';
 import { stringToNumber } from '@/utils/string';
 import { BigNumber } from 'bignumber.js';
@@ -59,17 +62,17 @@ export default class DriverIndex extends Vue {
     return num;
   }
 
-  private async getCurrentLoginGasRecord() {
-    const result = await getCurrentLoginGasRecord({
-        isEncrypt: true,
-        jsonObject: {
-          isWhole: true
-        }
-    });
-    this.gasRecord = result;
-    // 动画开始
-    tween(0, this.totalLum, this.updateValue);
-  }
+  // private async getCurrentLoginGasRecord() {
+  //   const result = await getCurrentLoginGasRecord({
+  //       isEncrypt: true,
+  //       jsonObject: {
+  //         isWhole: true
+  //       }
+  //   });
+  //   this.gasRecord = result;
+  //   // 动画开始
+  //   tween(0, this.totalLum, this.updateValue);
+  // }
 
   private handleDivideMode(avaliableLnum: number) {
     this.isPrivateCar = true;
@@ -77,11 +80,15 @@ export default class DriverIndex extends Vue {
   }
 
   private mounted() {
+    // const userInfo = getLocalData('userInfo');
+    // if(userInfo.gasMode === 'divide') {
+    //   this.handleDivideMode(new BigNumber(userInfo.availableLum).toNumber());
+    // } else {
+    //   this.getCurrentLoginGasRecord();
+    // }
     const userInfo = getLocalData('userInfo');
     if(userInfo.gasMode === 'divide') {
       this.handleDivideMode(new BigNumber(userInfo.availableLum).toNumber());
-    } else {
-      this.getCurrentLoginGasRecord();
     }
   }
 

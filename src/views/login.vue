@@ -1,6 +1,6 @@
 <template>
 <div class="wrapper">
-  <div class="title">
+  <div class="logo-text">
     车行通
   </div>
   <div class="container">

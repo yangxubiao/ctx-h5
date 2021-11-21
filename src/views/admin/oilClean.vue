@@ -11,6 +11,7 @@
         <van-icon name="arrow-down" />
       </div>
       <span>{{totalTunnage}}</span>
+      <span>{{getProxyPree}}</span>
     </div>
     <van-list
       v-model="rechargeLoading"
@@ -98,6 +99,22 @@ export default class AdminRecharge extends Vue {
 
   private toggleDate() {
     this.isShowDate = true;
+  }
+
+  get getProxyPree() {
+    return this.settleCalue === '1' ? '' :  `代加费${this.shouldRepayAmount}元`
+  }
+
+  // 总应还代加金额
+  get shouldRepayAmount(){
+    const num = this.rechargesList.filter((item: any) => item.settleStatus === '0').reduce((pre: any, next: any)=> {
+      return (
+          (
+            new BigNumber(pre).plus(new BigNumber(next.chargeLnum).multipliedBy(next.proxyFee).div(10).toString())
+          ).toString()
+        )
+    },0)
+    return num;
   }
 
   private onLoad() {

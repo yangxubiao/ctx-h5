@@ -399,7 +399,7 @@ export default class CarOilDivideManage extends Vue {
 
 .btns
   position fixed
-  bottom 0
+  bottom 50px
   right 0
   left 0
   background-color #ffffff
