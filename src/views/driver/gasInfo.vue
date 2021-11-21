@@ -6,7 +6,9 @@
         v-for="(oilItem, oilIndex) in allOilList"
         :key="oilIndex"
     >
-      <van-cell :title="oilItem.gasName" :value="oilItem.phone"/>
+      <van-cell :title="oilItem.gasName">
+        <a :href="'tel:'+oilItem.phone">{{ oilItem.phone }}</a>
+      </van-cell>
     </van-swipe-cell>
   </div>
 </template>
