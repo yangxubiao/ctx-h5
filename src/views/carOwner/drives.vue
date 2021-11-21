@@ -37,6 +37,9 @@ import { getCurrentUserAllDrivesList } from '@/api/carOwner/users'
 import { delUserItemById } from '@/api/users'
 import Loading from '@/components/loading.vue';
 import pickBy from 'lodash/pickBy';
+import BigNumber from 'bignumber.js';
+import { getLocalData } from '@/utils/local';
+import { divideOil } from '@/api/carOwner/oil';
 
 @Component({
   components: {
@@ -142,15 +145,24 @@ export default class adminCarOwners extends Vue {
       message: `确定要删除 ${userItem.name} 用户吗 ?`,
     })
     .then(async () => {
+      let availableLum = new BigNumber(userItem.availableLum).toNumber();
+      if (userItem.gasMode === 'divide' &&  availableLum > 0) {
+        const userInfo = getLocalData('userInfo');
+        await divideOil({
+          carId: userInfo.carId,
+          lnum: String(availableLum),
+          gasMode: 'div'
+        })
+      }
       await delUserItemById(userItem._id);
-      this.$toast('删除成功')
-      this.getUsersByCondition({
+        this.$toast('删除成功')
+        this.getUsersByCondition({
+          isWhole: true,
+        })
+      const allUsers = await getCurrentUserAllDrivesList({
         isWhole: true,
-      })
-    const allUsers = await getCurrentUserAllDrivesList({
-      isWhole: true,
-    });
-    this.usersALl = allUsers;
+      });
+      this.usersALl = allUsers;
     }).catch(()=>{})
   }
 

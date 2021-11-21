@@ -415,7 +415,7 @@ export default class CarOilDivideManage extends Vue {
   padding 20px
   height 60vh
   overflow-y auto
-  flexStyle(justifyContent: space-between,  alignItem: start)
+  flexStyle(justifyContent: space-between, alignItems: flex-start)
   flex-wrap wrap
   .item
     width 45%

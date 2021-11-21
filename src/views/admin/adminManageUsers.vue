@@ -132,6 +132,8 @@ import { createUser, getUserById, updateUser } from '@/api/users'
 import debounce from 'lodash/debounce';
 import JumpToPageVue from '@/components/jumpToPage.vue'
 import Loading from '@/components/loading.vue';
+import BigNumber from 'bignumber.js';
+import { divideOil } from '@/api/carOwner/oil';
 
 @Component({
   components: {
@@ -253,6 +255,8 @@ export default class adminRegister extends Vue {
     gasProxyFee: '', // (对于加油工必填）
   }
 
+  private newFormObj: any = {};
+
   private throttleSubmit = debounce(() => {
     this.onSubmit()
   }, 500)
@@ -281,6 +285,14 @@ export default class adminRegister extends Vue {
           })
           this.$toast('添加成功');
         } else {
+          let availableLum = new BigNumber(this.newFormObj.availableLum).toNumber();
+          if (this.newFormObj.gasMode === 'divide' && rest.gasMode === "public" && availableLum > 0) {
+            await divideOil({
+              carId: rest.carId,
+              lnum: String(availableLum),
+              gasMode: 'div'
+            })
+          }
           const result = await updateUser({
             isEncrypt: true,
             jsonObject: rest
@@ -386,6 +398,8 @@ export default class adminRegister extends Vue {
     if (this.scene === 'update') {
       const result = await getUserById((this.$route.query.id as string));
       this.formObj = result;
+      this.formObj = result;
+      this.newFormObj = {...result}
     }
     this.pageLoading = false;
   }

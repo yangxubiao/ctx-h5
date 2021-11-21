@@ -27,6 +27,15 @@ export const carOwnerRoutes: RouteCustom[] = [
       title: '',
     },
   },
+
+  {
+    path: '/car-divide-oil',
+    name: 'carDivideOil',
+    component: () => import(/* webpackChunkName: "divideOil" */ '@/views/carOwner/divideOil.vue'),
+    meta: {
+      title: '',
+    },
+  },
   {
     path: '/car-driver-gas',
     name: 'carDriverGas',

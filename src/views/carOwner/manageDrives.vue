@@ -88,6 +88,8 @@ import { getCurrentUser } from '@/api/carOwner/users'
 import debounce from 'lodash/debounce';
 import JumpToPageVue from '@/components/jumpToPage.vue'
 import Loading from '@/components/loading.vue';
+import BigNumber from 'bignumber.js';
+import { divideOil } from '@/api/carOwner/oil';
 
 @Component({
   components: {
@@ -139,6 +141,7 @@ export default class adminRegister extends Vue {
           value: {
             gasModeName: '分油',
             gasMode: 'divide',
+            availableLum: '0', // 可用升数， 针对驾驶员
           }
         },
         {
@@ -146,6 +149,7 @@ export default class adminRegister extends Vue {
           value: {
             gasModeName: '共享',
             gasMode: 'public',
+            availableLum: '0', // 可用升数， 针对驾驶员
           }
         }]
         break;
@@ -177,6 +181,8 @@ export default class adminRegister extends Vue {
     carId: '', // (对与驾驶员和车老板必填)
   }
 
+  private newFormObj: any = {};
+
   private throttleSubmit = debounce(() => {
     this.onSubmit()
   }, 500)
@@ -198,7 +204,6 @@ export default class adminRegister extends Vue {
     const { confirmPassWord, ...rest } = this.formObj;
     if (action === 'confirm') {
       try {
-        const { confirmPassWord, ...rest } = this.formObj;
         if (this.scene !== 'update') {
           await createUser({
             isEncrypt: true,
@@ -214,6 +219,14 @@ export default class adminRegister extends Vue {
           })
           this.$toast('添加成功');
         } else {
+          let availableLum = new BigNumber(this.newFormObj.availableLum).toNumber();
+          if (this.newFormObj.gasMode === 'divide' && rest.gasMode === "public" && availableLum > 0) {
+            await divideOil({
+              carId: rest.carId,
+              lnum: String(availableLum),
+              gasMode: 'div'
+            })
+          }
           await updateUser({
             isEncrypt: true,
             jsonObject: rest
@@ -260,6 +273,7 @@ export default class adminRegister extends Vue {
       const result = await getUserById((this.$route.query.id as string));
       this.pageLoading = false;
       this.formObj = result;
+      this.newFormObj = {...result}
     } else {
       this.currentUserInfo =  await getCurrentUser();
     }

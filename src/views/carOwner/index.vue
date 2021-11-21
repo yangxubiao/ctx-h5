@@ -14,7 +14,8 @@
           />
       </van-grid>
     </div>
-    <div class="password">
+    <div class="other">
+      <van-cell class="divide-oil" title="分油记录" is-link @click="jumpPage('carDivideOil')" />
       <van-cell class="updata-password" title="修改密码" is-link @click="jumpPage('password')" />
     </div>
       <LoginOut />
@@ -126,7 +127,10 @@ export default class CarOwnIndex extends Vue {
 .container
   width 100%
 
-.password
+.other
   width 100%
   padding 20px
+
+.divide-oil
+  margin-bottom 50px
 </style>
