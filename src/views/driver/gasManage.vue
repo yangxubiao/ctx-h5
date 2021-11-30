@@ -151,13 +151,16 @@ export default class GasVue extends Vue {
             }
           })
         }
-        await createOilRecord({
+        const result: any = await createOilRecord({
           ...this.formObj,
         });
         this.$toast('加油成功')
         done();
         this.$router.push({
-          name: 'driverGas'
+          name: 'driverGasResult',
+          query: {
+            id: result._id,
+          }
         });
       } catch (error) {
         done();

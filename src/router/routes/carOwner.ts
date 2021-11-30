@@ -8,7 +8,7 @@ export const carOwnerRoutes: RouteCustom[] = [
     name: 'carOwner',
     component: () => import(/* webpackChunkName: "carOwner" */ '@/views/carOwner/index.vue'),
     meta: {
-      title: '',
+      title: '车行通',
     },
   },
   {
@@ -16,7 +16,7 @@ export const carOwnerRoutes: RouteCustom[] = [
     name: 'carDrives',
     component: () => import(/* webpackChunkName: "carDirves" */ '@/views/carOwner/drives.vue'),
     meta: {
-      title: '',
+      title: '车行通',
     },
   },
   {
@@ -24,7 +24,7 @@ export const carOwnerRoutes: RouteCustom[] = [
     name: 'carOilDivideManage',
     component: () => import(/* webpackChunkName: "oilDivideManage" */ '@/views/carOwner/oilDivideManage.vue'),
     meta: {
-      title: '',
+      title: '车行通',
     },
   },
 
@@ -33,7 +33,7 @@ export const carOwnerRoutes: RouteCustom[] = [
     name: 'carDivideOil',
     component: () => import(/* webpackChunkName: "divideOil" */ '@/views/carOwner/divideOil.vue'),
     meta: {
-      title: '',
+      title: '车行通',
     },
   },
   {
@@ -41,7 +41,7 @@ export const carOwnerRoutes: RouteCustom[] = [
     name: 'carDriverGas',
     component: () => import(/* webpackChunkName: "carDriverGas" */ '@/views/carOwner/gas.vue'),
     meta: {
-      title: '',
+      title: '车行通',
     },
   },
   {
@@ -49,7 +49,7 @@ export const carOwnerRoutes: RouteCustom[] = [
     name: 'carManageDrives',
     component: () => import(/* webpackChunkName: "carManageDrives" */ '@/views/carOwner/manageDrives.vue'),
     meta: {
-      title: '',
+      title: '车行通',
     },
   },
   {
@@ -57,7 +57,7 @@ export const carOwnerRoutes: RouteCustom[] = [
     name: 'carRecharge',
     component: () => import(/* webpackChunkName: "carRecharge" */ '@/views/carOwner/recharge.vue'),
     meta: {
-      title: '',
+      title: '车行通',
     },
   },
 ];
