@@ -8,7 +8,7 @@ export const driversRoutes: RouteCustom[] = [
     name: 'driver',
     component: () => import(/* webpackChunkName: "driver" */ '@/views/driver/index.vue'),
     meta: {
-      title: '',
+      title: '车行通',
     },
   },
   {
@@ -16,7 +16,7 @@ export const driversRoutes: RouteCustom[] = [
     name: 'driverGas',
     component: () => import(/* webpackChunkName: "driverGas" */ '@/views/driver/gas.vue'),
     meta: {
-      title: '',
+      title: '车行通',
     },
   },
   {
@@ -24,7 +24,7 @@ export const driversRoutes: RouteCustom[] = [
     name: 'driverGasInfo',
     component: () => import(/* webpackChunkName: "gasInfo" */ '@/views/driver/gasInfo.vue'),
     meta: {
-      title: '',
+      title: '车行通',
     },
   },
   {
@@ -32,7 +32,15 @@ export const driversRoutes: RouteCustom[] = [
     name: 'driverGasManage',
     component: () => import(/* webpackChunkName: "driverGasManage" */ '@/views/driver/gasManage.vue'),
     meta: {
-      title: '',
+      title: '车行通',
+    },
+  },
+  {
+    path: '/driver-gas-result',
+    name: 'driverGasResult',
+    component: () => import(/* webpackChunkName: "driverGasResult" */ '@/views/driver/gasResult.vue'),
+    meta: {
+      title: '车行通',
     },
   },
 ];

@@ -14,16 +14,25 @@ const routes: Array<RouteConfig> = [
     path: '/',
     name: 'home',
     component: () => import(/* webpackChunkName: "home" */ '@/views/home.vue'),
+    meta: {
+      title: '车行通',
+    },
   },
   {
     path: '/login',
     name: 'login',
     component: () => import(/* webpackChunkName: "login" */ '@/views/login.vue'),
+    meta: {
+      title: '车行通',
+    },
   },
   {
     path: '/password',
     name: 'password',
     component: () => import(/* webpackChunkName: "password" */ '@/views/password.vue'),
+    meta: {
+      title: '车行通',
+    },
   },
   ...adminRoutes, // 管理员
   ...carOwnerRoutes, // 车老板
@@ -36,6 +45,9 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to: any, from: any, next: any) => {
+  if (to.meta.title) { // 设置页面标题
+    document.title = to.meta.title;
+  }
   if (!['login', 'home', 'password'].includes(to.name)) {
     const routerJurisdictionMap: any = {
       管理员: 'admin',

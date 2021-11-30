@@ -8,7 +8,7 @@ export const oilersRoutes: RouteCustom[] = [
     name: 'oiler',
     component: () => import(/* webpackChunkName: "oiler" */ '@/views/oiler/index.vue'),
     meta: {
-      title: '',
+      title: '车行通',
     },
   },
   {
@@ -16,7 +16,7 @@ export const oilersRoutes: RouteCustom[] = [
     name: 'oilerGas',
     component: () => import(/* webpackChunkName: "oilerGas" */ '@/views/oiler/gas.vue'),
     meta: {
-      title: '',
+      title: '车行通',
     },
   },
   {
@@ -24,7 +24,7 @@ export const oilersRoutes: RouteCustom[] = [
     name: 'oilerPayOilQr',
     component: () => import(/* webpackChunkName: "payOilQr" */ '@/views/oiler/payOilQr.vue'),
     meta: {
-      title: '',
+      title: '车行通',
     },
   },
 
