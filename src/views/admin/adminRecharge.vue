@@ -22,7 +22,7 @@
         v-for="(rechargeItem, rechargeIndex) in rechargesList"
         :key="rechargeIndex"
       >
-        <van-cell :title="rechargeItem.name" :value="rechargeItem.chargeTunnage + '吨'" :label="timeFormat(rechargeItem.createdAt, 'YYYY-MM-DD HH:mm:ss')"/>
+        <van-cell :title="rechargeItem.name" :value="floatByNum(rechargeItem.chargeTunnage) + '吨'" :label="timeFormat(rechargeItem.createdAt, 'YYYY-MM-DD HH:mm:ss')"/>
         <template #right>
           <div class="more">
             <!-- <van-button square type="danger" text="删除" @click="delRechargeItemById(rechargeItem)" /> -->
@@ -62,6 +62,7 @@ import { getAllCarsList } from '@/api/cars';
 import { BigNumber } from 'bignumber.js';
 import Loading from '@/components/loading.vue';
 import pickBy from 'lodash/pickBy';
+import { floatByNum } from '@/utils/filter'
 
 @Component({
   components: {
@@ -104,6 +105,10 @@ export default class AdminRecharge extends Vue {
     this.isShowDate = true;
   }
 
+  private floatByNum(num: any, fixed: number = 2) {
+    return floatByNum(num, fixed);
+  }
+
   private onLoad() {
     this.serachObj.queryPage+=1;
     this.getAllRechargesList();
@@ -127,7 +132,7 @@ export default class AdminRecharge extends Vue {
     const num = this.rechargesList.reduce((pre: any, next: any)=> {
       return new BigNumber(pre).plus(next.chargeTunnage)
     }, 0)
-    return num;
+    return this.floatByNum(num);
   }
 
   // 总应还代加金额
@@ -139,7 +144,7 @@ export default class AdminRecharge extends Vue {
           ).toString()
         )
     },0)
-    return num;
+    return this.floatByNum(num, 0);
   }
 
   private serachObj: any = {

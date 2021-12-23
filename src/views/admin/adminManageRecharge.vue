@@ -25,13 +25,13 @@
       :rules="[{ required: true, message: '请选择车队名' }]"
     />
     <van-field 
-      v-model="formObj.chargeTunnage" 
+      v-model="formObj.chargeLnum" 
       type="number" 
-      label="吨数"
+      label="升数"
       class="field"
-      @input="chargeTunnageInput"
-      placeholder="请输入吨数"
-      :rules="[{ required: true, message: '请输入吨数' }]"
+      @input="chargeLnumInput"
+      placeholder="请输入升数"
+      :rules="[{ required: true, message: '请输入升数' }]"
     />
     <van-field
       readonly
@@ -148,13 +148,13 @@ export default class adminManageRecharge extends Vue {
   }, 500)
 
   private async onSubmit() {
-    if (Number(this.formObj.chargeTunnage) <= 0) {
+    if (Number(this.formObj.chargeLnum) <= 0) {
       this.$toast('吨数不能小于0')
       return;
     }
     this.$dialog.confirm({
       title: '',
-      message: `<div>确认要给: <span class="focus-text">${this.formObj.carName}</span></div><div>${this.scene !== 'update' ? '充值' : '修改为'}: <span class="focus-text">${this.formObj.chargeTunnage}</span>吨吗?</div>`,
+      message: `<div>确认要给: <span class="focus-text">${this.formObj.carName}</span></div><div>${this.scene !== 'update' ? '充值' : '修改为'}: <span class="focus-text">${this.formObj.chargeLnum}</span>升吗?</div>`,
       beforeClose: this.beforeCloseDialog,
     })
   }
@@ -206,8 +206,8 @@ export default class adminManageRecharge extends Vue {
     settleStatus: '',
   }
 
-  private chargeTunnageInput(value: string) {
-    this.formObj.chargeLnum = ((new BigNumber(value).multipliedBy(process.env.VUE_APP_API_DEFAULT_L_NUM)).toString())
+  private chargeLnumInput(value: string) {
+    this.formObj.chargeTunnage = ((new BigNumber(value).dividedBy(process.env.VUE_APP_API_DEFAULT_L_NUM)).toString())
   }
 
   private async created(){

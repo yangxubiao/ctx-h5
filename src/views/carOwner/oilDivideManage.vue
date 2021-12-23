@@ -329,7 +329,7 @@ export default class CarOilDivideManage extends Vue {
   get newNameOption() {
     let defaultList = [{ text: '全部', value: '' }];
     if(this.usersALl.length) {
-      defaultList = [...defaultList, ...this.usersALl.map((item: any)=> ({ text: item.name, value: item.name }))];
+      defaultList = [...defaultList, ...this.usersALl.map((item: any)=> ({ text: item.name + ' - ' + item.carNo, value: item.name }))];
     }
     return defaultList;
   }

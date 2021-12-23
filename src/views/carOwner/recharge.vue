@@ -21,7 +21,7 @@
         v-for="(rechargeItem, rechargeIndex) in rechargesList"
         :key="rechargeIndex"
       >
-        <van-cell :title="rechargeItem.name" :value="rechargeItem.chargeTunnage + '吨'" :label="timeFormat(rechargeItem.createdAt, 'YYYY-MM-DD HH:mm:ss')"/>
+        <van-cell :title="rechargeItem.name" :value="floatByNum(rechargeItem.chargeTunnage) + '吨'" :label="timeFormat(rechargeItem.createdAt, 'YYYY-MM-DD HH:mm:ss')"/>
       </van-swipe-cell>
     </van-list>
     <van-popup
@@ -51,6 +51,7 @@ import dayjs from 'dayjs';
 import { BigNumber } from 'bignumber.js';
 import Loading from '@/components/loading.vue';
 import pickBy from 'lodash/pickBy';
+import { floatByNum } from '@/utils/filter'
 
 @Component({
   components: {
@@ -88,6 +89,10 @@ export default class DriverRecharge extends Vue {
 
   private toggleDate() {
     this.isShowDate = true;
+  }
+
+  private floatByNum(num: any, fixed: number) {
+    return floatByNum(num, fixed);
   }
 
   private confirm(date: Date) {
@@ -129,7 +134,7 @@ export default class DriverRecharge extends Vue {
             ).toString()
         )
     },0)
-    return num;
+    return this.floatByNum(num, 0);
   }
 
   private serachObj: any = {
