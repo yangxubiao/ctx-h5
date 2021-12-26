@@ -24,6 +24,7 @@ Vue,  Component,
 } from 'vue-property-decorator';
 // import { getCurrentLoginGasRecord } from '@/api/driver/oil'
 import tween from '@/utils/tween';
+import { queryCarOwnerGasInfo } from '@/api/carOwner/summary'
 import { stringToNumber } from '@/utils/string';
 import { BigNumber } from 'bignumber.js';
 import LoginOut from '@/components/loginOut.vue'
@@ -80,7 +81,7 @@ export default class DriverIndex extends Vue {
     tween(0, avaliableLnum, this.updateValue);
   }
 
-  private mounted() {
+  private async mounted() {
     // const userInfo = getLocalData('userInfo');
     // if(userInfo.gasMode === 'divide') {
     //   this.handleDivideMode(new BigNumber(userInfo.availableLum).toNumber());
@@ -90,6 +91,16 @@ export default class DriverIndex extends Vue {
     const userInfo = getLocalData('userInfo');
     if(userInfo.gasMode === 'divide') {
       this.handleDivideMode(new BigNumber(userInfo.availableLum).toNumber());
+    } else {
+      const gasInfo: any = await queryCarOwnerGasInfo({
+        isEncrypt: true,
+        jsonObject: {
+          carId: userInfo.carId,
+          carName: userInfo.carName,
+        }
+      });
+      // 动画开始
+      this.handleDivideMode(new BigNumber(gasInfo?.avaliableLnum || 0).toNumber());
     }
   }
 
