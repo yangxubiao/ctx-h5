@@ -3,7 +3,14 @@
   <Loading v-if="loading" />
   <div  v-else class="wrapper">
     <van-dropdown-menu>
-      <van-dropdown-item @change="nameChange" v-model="nameValue" :options="newNameOption" />
+      <van-dropdown-item title="搜索" ref="item">
+      <van-field  class="field" v-model="valueKey" placeholder="请输入关键字" />
+      <div style="padding: 5px 16px;">
+        <van-button type="danger" block round @click="onConfirm">
+          搜索
+        </van-button>
+      </div>
+    </van-dropdown-item>
     </van-dropdown-menu>
     <van-grid :column-num="2" class="grid">
         <van-grid-item
@@ -110,7 +117,20 @@ export default class CarOilDivideManage extends Vue {
     }
     return 0;
   }
+  private valueKey: string = '';
 
+  private option: any = [
+        { text: '全部商品', value: 0 },
+        { text: '新款商品', value: 1 },
+        { text: '活动商品', value: 2 },
+  ];
+
+  private onConfirm() {
+      (this.$refs.item as any).toggle();
+      if (this.valueKey) {
+        this.getUsersByCondition();
+      }
+  };
   // 额度值
   private ableUseValue: string = '0'
 
@@ -124,8 +144,6 @@ export default class CarOilDivideManage extends Vue {
   private usersALl: any = [];
 
   private dialogShow: boolean = false;
-
-  private nameValue: string = '';
 
   private roleVlue: string = '';
 
@@ -326,24 +344,11 @@ export default class CarOilDivideManage extends Vue {
     }
   }
 
-  get newNameOption() {
-    let defaultList = [{ text: '全部', value: '' }];
-    if(this.usersALl.length) {
-      defaultList = [...defaultList, ...this.usersALl.map((item: any)=> ({ text: item.name + ' - ' + item.carNo, value: item.name }))];
-    }
-    return defaultList;
-  }
-
   private serachform: any = {
     perPage: 10,
     queryPage: 1,
     name: '',
     gasMode: 'divide',
-  }
-
-  private nameChange(value: any) {
-    this.serachform.name = value;
-    this.getUsersByCondition()
   }
 
   private isActivited(_id: string) {
@@ -374,7 +379,11 @@ export default class CarOilDivideManage extends Vue {
   }
 
   get serachParams() {
-    return pickBy(this.serachform);
+    let obj: any = pickBy(this.serachform);
+    if (this.valueKey) {
+      obj.valueKey = this.valueKey
+    }
+    return obj;
   }
 
   private async created() {
@@ -444,6 +453,12 @@ export default class CarOilDivideManage extends Vue {
 .dialog-content
   overflow-y auto
   max-height 200px
+
+.field
+  background-color #e8e8e8
+  border-radius 5px
+  width 90%
+  margin 10px auto
 </style>
 <style lang='stylus'>
 .handle-div-oil
