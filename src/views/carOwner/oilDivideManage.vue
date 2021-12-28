@@ -2,16 +2,6 @@
 <template>
   <Loading v-if="loading" />
   <div  v-else class="wrapper">
-    <van-dropdown-menu>
-      <van-dropdown-item title="搜索" ref="item">
-      <van-field  class="field" v-model="valueKey" placeholder="请输入关键字" />
-      <div style="padding: 5px 16px;">
-        <van-button type="danger" block round @click="onConfirm">
-          搜索
-        </van-button>
-      </div>
-    </van-dropdown-item>
-    </van-dropdown-menu>
     <van-grid :column-num="2" class="grid">
         <van-grid-item
           v-for="(gridItem, gridIndex) in grids"
@@ -26,6 +16,17 @@
           </template>
         </van-grid-item>
     </van-grid>
+      <van-field
+        v-model="valueKey"
+        center
+        class="field"
+        clearable
+        placeholder="请输入关键字"
+      >
+      <template #button>
+        <van-button  @click="onConfirm" type="danger">搜索</van-button>
+      </template>
+    </van-field>
     <ul
       class="common-list list"
     >
@@ -126,10 +127,7 @@ export default class CarOilDivideManage extends Vue {
   ];
 
   private onConfirm() {
-      (this.$refs.item as any).toggle();
-      if (this.valueKey) {
-        this.getUsersByCondition();
-      }
+      this.getUsersByCondition();
   };
   // 额度值
   private ableUseValue: string = '0'
@@ -454,11 +452,6 @@ export default class CarOilDivideManage extends Vue {
   overflow-y auto
   max-height 200px
 
-.field
-  background-color #e8e8e8
-  border-radius 5px
-  width 90%
-  margin 10px auto
 </style>
 <style lang='stylus'>
 .handle-div-oil
