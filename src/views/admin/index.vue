@@ -41,6 +41,8 @@ export default class adminIndex extends Vue {
 
   private oilCleanIcon = require('@/assets/svg/oilClean.svg');
 
+  private oilQuantityMonitorIcon = require('@/assets/svg/oilQuantityMonitor.svg');
+
   private grids = [
     {
       name: '用户',
@@ -71,6 +73,11 @@ export default class adminIndex extends Vue {
       name: ' 进油记录页',
       page: 'adminOilCleanManage',
       img: this.oilCleanIcon,
+    },
+    {
+      name: ' 油量监控',
+      page: 'adminOilQuantityMonitor',
+      img: this.oilQuantityMonitorIcon,
     },
   ]
 

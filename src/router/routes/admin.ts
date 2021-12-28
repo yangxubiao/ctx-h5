@@ -28,6 +28,14 @@ export const adminRoutes: RouteCustom[] = [
     },
   },
   {
+    path: '/admin-oil-quantity-monitor',
+    name: 'adminOilQuantityMonitor',
+    component: () => import(/* webpackChunkName: "adminOilQuantityMonitor" */ '@/views/admin/adminOilQuantityMonitor.vue'),
+    meta: {
+      title: '车行通',
+    },
+  },
+  {
     path: '/admin-oil',
     name: 'adminOil',
     component: () => import(/* webpackChunkName: "adminOil" */ '@/views/admin/adminOil.vue'),
