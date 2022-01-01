@@ -27,6 +27,21 @@
         })();
       </script>
     <% } %>
+    <script>
+      // 这段代码用于避免 html 出现缓存现象导致请求错误的版本文件
+        var url = location.href.split('#')[0];
+        if (url.indexOf('?') > -1) {
+          var queryParams = url.substring(url.indexOf('?')+1)
+          if (!(queryParams.indexOf('timeTemp') > -1)) {
+            var queryParamsArray = queryParams.split('&');
+            queryParamsArray.push('timeTemp=' + Date.now());
+            var queryParamsArrayString = queryParamsArray.join('&');
+            window.location.replace(url.split('?')[0] + '?' + queryParamsArrayString + location.hash);
+          }
+        } else {
+          window.location.replace(url + '?timeTemp=' + Date.now() + location.hash);
+        }
+    </script>
   </head>
   <body>
     <noscript>
