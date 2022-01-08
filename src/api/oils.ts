@@ -51,6 +51,14 @@ export async function delOilCleanRecord(
   return result;
 }
 
+// 删除加油记录
+export async function delOilRecord(
+  id: string,
+) {
+  const result = await Ax.delete(`/oil/delOilRecord/${id}`);
+  return result;
+}
+
 // 获取加油点结清记录
 export async function getAllOilRecordRecords(
   parmas: any,
