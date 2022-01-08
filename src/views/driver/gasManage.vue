@@ -65,7 +65,6 @@ import JumpToPageVue from '@/components/jumpToPage.vue'
 import { getUserById, updateUser } from '@/api/users'
 import Loading from '@/components/loading.vue';
 import BigNumber from 'bignumber.js';
-import { getLocalData } from '@/utils/local';
 import tween from '@/utils/tween';
 import { stringToNumber } from '@/utils/string';
 import { queryCarOwnerGasInfo } from '@/api/carOwner/summary'
@@ -236,15 +235,15 @@ export default class GasVue extends Vue {
   }
 
   private async created() {
-    const userInfo = getLocalData('userInfo');
-    if(userInfo.gasMode === 'divide') {
-      this.handleDivideMode(new BigNumber(userInfo.availableLum).toNumber());
+    const result: any = await getCurrentUser();
+    if(result.gasMode === 'divide') {
+      this.handleDivideMode(new BigNumber(result.availableLum).toNumber());
     } else {
       const gasInfo: any = await queryCarOwnerGasInfo({
         isEncrypt: true,
         jsonObject: {
-          carId: userInfo.carId,
-          carName: userInfo.carName,
+          carId: result.carId,
+          carName: result.carName,
         }
       });
       // 动画开始
@@ -256,7 +255,6 @@ export default class GasVue extends Vue {
       this.formObj.oilId = gasInfo.gasId;
       this.formObj.oilProxyFee = gasInfo.gasProxyFee;
     }
-    const result: any = await getCurrentUser();
     this.userInfo = result;
     this.formObj.carNo = result.carNo;
     this.formObj.carName = result.carName;
