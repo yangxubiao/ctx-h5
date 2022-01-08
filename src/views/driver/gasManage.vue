@@ -26,7 +26,7 @@
     placeholder="请输入加油升数"
     :rules="[{ required: true, message: '请输入加油升数' }]"
   />
-  <van-field 
+  <!-- <van-field 
     name="uploader" 
     label="加油图片"
     class="field"
@@ -34,7 +34,7 @@
   <template #input>
     <van-uploader max-count='1' v-model="uploader" :after-read="afterRead"/>
   </template>
-</van-field>
+</van-field> -->
   <van-popup v-model="showPicker" position="bottom">
     <van-picker
       show-toolbar
