@@ -1,6 +1,9 @@
 <template>
   <Loading v-if="pageLoading" />
   <div v-else class="wrapper">
+  <div class="lnum" v-if="isPrivateCar">
+      我的升数: {{ tweeningValue }}
+  </div>
   <van-form @submit="throttleSubmit" class="container">
   <van-field
     v-if="!isFromScan"
@@ -15,7 +18,7 @@
     @click="handlerPicker"
     :rules="[{ required: true, message: '请选择加油点' }]"
   />
-  <van-field 
+  <van-field
     v-model="formObj.oilLnum" 
     type="number" 
     label="加油升数" 
@@ -62,6 +65,10 @@ import JumpToPageVue from '@/components/jumpToPage.vue'
 import { getUserById, updateUser } from '@/api/users'
 import Loading from '@/components/loading.vue';
 import BigNumber from 'bignumber.js';
+import { getLocalData } from '@/utils/local';
+import tween from '@/utils/tween';
+import { stringToNumber } from '@/utils/string';
+import { queryCarOwnerGasInfo } from '@/api/carOwner/summary'
 
 @Component({
   components: {
@@ -97,6 +104,8 @@ export default class GasVue extends Vue {
   private value: string = ''
 
   private userInfo: any = {};
+
+  private isPrivateCar: boolean = false;
 
   private formObj: any = {
     userId: '', // 用户id
@@ -212,7 +221,35 @@ export default class GasVue extends Vue {
     return (this.$route.query?.userId && this.$route.query?.toPage === 'driverGasManage')
   }
 
+  private handleDivideMode(avaliableLnum: number) {
+    this.isPrivateCar = true;
+    tween(0, avaliableLnum, this.updateValue);
+  }
+
+  private tweeningValue: string = '0'
+
+  /**
+   * 数字每一帧滚动触发的回调
+   */
+  updateValue(tweenobj: { object: { tweeningValue: string } }) {
+    this.tweeningValue = stringToNumber(tweenobj.object.tweeningValue).toFixed(2);
+  }
+
   private async created() {
+    const userInfo = getLocalData('userInfo');
+    if(userInfo.gasMode === 'divide') {
+      this.handleDivideMode(new BigNumber(userInfo.availableLum).toNumber());
+    } else {
+      const gasInfo: any = await queryCarOwnerGasInfo({
+        isEncrypt: true,
+        jsonObject: {
+          carId: userInfo.carId,
+          carName: userInfo.carName,
+        }
+      });
+      // 动画开始
+      this.handleDivideMode(new BigNumber(gasInfo?.avaliableLnum || 0).toNumber());
+    }
     if (this.isFromScan) {
       const gasInfo: any = await getUserById((this.$route.query.userId as string));
       this.formObj.oilName = gasInfo.gasName;
@@ -245,6 +282,11 @@ export default class GasVue extends Vue {
 
 .field
   margin-top 20px
+
+.lnum
+  font-size 40px
+  color #fff
+  margin-bottom 30px
 </style>
 <style lang='stylus'>
 .oil-text

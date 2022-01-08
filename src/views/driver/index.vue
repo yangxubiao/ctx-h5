@@ -120,8 +120,9 @@ export default class DriverIndex extends Vue {
   flexStyle(flexDirection: column)
 
 .lnum
-  font-size 28px
+  font-size 30px
   color #fff
+  margin-top 20px
 
 .container
   width 100%
