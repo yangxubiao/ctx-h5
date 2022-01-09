@@ -32,4 +32,8 @@ export default class App extends Vue {
   background-size 100% 100%
   width 100%
   height 100%
+
+.tabbar
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
 </style>

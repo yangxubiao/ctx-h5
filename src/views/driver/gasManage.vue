@@ -47,7 +47,7 @@
   <div style="margin: 16px;">
     <van-button round block type="info" native-type="submit">提交</van-button>
   </div>
-  <JumpToPageVue :pageInfo="pageInfo"/>
+  <JumpToPageVue class="bottom-jump" :pageInfo="pageInfo"/>
 </van-form>
   </div>
 </template>
@@ -68,6 +68,7 @@ import BigNumber from 'bignumber.js';
 import tween from '@/utils/tween';
 import { stringToNumber } from '@/utils/string';
 import { queryCarOwnerGasInfo } from '@/api/carOwner/summary'
+import { getLocalData } from '@/utils/local';
 
 @Component({
   components: {
@@ -235,7 +236,10 @@ export default class GasVue extends Vue {
   }
 
   private async created() {
-    const result: any = await getCurrentUser();
+    let result: any = getLocalData('userInfo');
+    if (!(this.$route.query?.from === 'login')) {
+      result = await getCurrentUser();
+    }
     if(result.gasMode === 'divide') {
       this.handleDivideMode(new BigNumber(result.availableLum).toNumber());
     } else {
@@ -285,6 +289,9 @@ export default class GasVue extends Vue {
   font-size 40px
   color #fff
   margin-bottom 30px
+
+.bottom-jump
+  margin-top 120px
 </style>
 <style lang='stylus'>
 .oil-text

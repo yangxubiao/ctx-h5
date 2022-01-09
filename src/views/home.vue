@@ -5,21 +5,16 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { getCurrentUser } from '@/api/carOwner/users'
-import { setLocalData } from '@/utils/local'
+import { getLocalData } from '@/utils/local'
 
 @Component
 export default class Home extends Vue {
-  private async created() {
-    const result: {
-      [key: string]: any;
-    } = await getCurrentUser();
-    setLocalData(
-        {
-          key: 'userInfo',
-          value: result,
-        },
-    );
+  private created() {
+  const userInfo = getLocalData('userInfo');
+    if (!userInfo) {
+      this.$toast("登录失效，请重新登录")
+      this.$router.replace({ name: 'login' });
+    }
     const routerMap: any = {
       '0': 'admin',
       '1': 'carOwner',
@@ -27,7 +22,7 @@ export default class Home extends Vue {
       '3': 'oiler',
     };
     this.$router.replace({
-      name: routerMap[result['roleNo']]
+      name: routerMap[userInfo['roleNo']]
     })
   }
 }
