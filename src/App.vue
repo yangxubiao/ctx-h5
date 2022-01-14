@@ -24,11 +24,15 @@ export default class App extends Vue {
   private routerChange(to: any) {
     this.isNotShowTabbar = !(['login', 'admin', 'carOwner', 'driver', 'oiler'].includes(to.name))
   }
+
+  created() {
+    (document.getElementById('first-loading-wrap') as any).remove();
+  }
 }
 </script>
 <style scoped lang="stylus">
 #app
-  background-image url('./assets/img/bg.jpeg')
+  background-color #000
   background-size 100% 100%
   width 100%
   height 100%
