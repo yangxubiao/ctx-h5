@@ -24,10 +24,6 @@ export default class App extends Vue {
   private routerChange(to: any) {
     this.isNotShowTabbar = !(['login', 'admin', 'carOwner', 'driver', 'oiler'].includes(to.name))
   }
-
-  created() {
-    (document.getElementById('first-loading-wrap') as any).remove();
-  }
 }
 </script>
 <style scoped lang="stylus">
