@@ -112,8 +112,9 @@ export default class Gas extends Vue {
 
   private onConfirm() {
     this.serachObj = {
-      isWhole: true,
       ...this.serachObj,
+      perPage: 10,
+      queryPage: 1,
     }
     this.getAllOilSitesList();
   };
@@ -150,7 +151,6 @@ export default class Gas extends Vue {
   }
 
   private async created() {
-    this.serachObj.isWhole = true;
     this.oilList = await getAllOilSitesList();
   }
 
@@ -161,7 +161,7 @@ export default class Gas extends Vue {
 
   private serachObj: any = {
     perPage: 10,
-    queryPage: 1,
+    queryPage: 0,
     oilName: '',
     oilId: '',
     userId: '', // 用户id
@@ -179,7 +179,6 @@ export default class Gas extends Vue {
   private confirm(date: Date) {
     this.nowDate = dayjs(date).toDate();
     this.isShowDate = false;
-    this.serachObj.isWhole = true;
     this.getAllOilSitesList();
   }
 
@@ -203,15 +202,6 @@ export default class Gas extends Vue {
     if(this.serachObj.oilName === '加油点名称') {
       delete this.serachObj.oilName
     }
-    let isWhole: boolean = this.serachObj.isWhole;
-    if (this.serachObj.isWhole) {
-        this.serachObj.perPage = 10;
-        this.serachObj.queryPage = 1;
-        delete this.serachObj.isWhole
-    }
-    if (isWhole) {
-      this.loading = true;
-    }
     try {
       let result: any = await getCurrentCarOwnerGasRecord({
         isEncrypt: true,
@@ -230,24 +220,18 @@ export default class Gas extends Vue {
         }
         return item;
       })
-      if (isWhole) {
-        this.loading = false;
-      }
       if (result && result.length < this.serachObj.perPage) {
         this.gasFinished = true;
       } else {
         this.gasFinished = false;
       }
       this.gasLoading = false;
-      if (isWhole) {
+    if (this.serachObj.queryPage === 1) {
         this.gasRecord = result;
       } else {
         this.gasRecord = [...this.gasRecord, ...result];
       }
     } catch (error) {
-      if (isWhole) {
-        this.loading = false;
-      }
       console.log(error, 'error')
     }
   }
@@ -263,7 +247,8 @@ export default class Gas extends Vue {
     this.serachObj = {
       ...this.serachObj,
       ...serachObj,
-      isWhole: true,
+      perPage: 10,
+      queryPage: 1,
     }
     this.getAllOilSitesList();
   }
