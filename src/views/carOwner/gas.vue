@@ -3,8 +3,7 @@
   <Loading v-if="loading" />
   <div v-else class="wrapper">
     <van-dropdown-menu>
-      <van-dropdown-item @change="dirverChange" v-model="dirverValue" :options="drivesOption" :key="1" />
-      <van-dropdown-item @change="oilChange" v-model="oilvalue" :options="oilOption" :key="2" />
+      <van-dropdown-item @change="oilChange" v-model="oilvalue" :options="oilOption"/>
     </van-dropdown-menu>
     <div class="form-date"  @click="toggleDate">
       <div>
@@ -12,6 +11,19 @@
         <van-icon name="arrow-down" />
       </div>
       <span>{{getTotalLnum}}</span>
+    </div>
+    <div>
+        <van-field
+          v-model="valueKey"
+          center
+          class="field"
+          clearable
+          placeholder="请输入关键字"
+        >
+        <template #button>
+          <van-button  @click="onConfirm" type="danger">搜索</van-button>
+        </template>
+      </van-field>
     </div>
     <van-list
       v-model="gasLoading"
@@ -71,7 +83,6 @@ import dayjs from 'dayjs';
 import Loading from '@/components/loading.vue';
 import pickBy from 'lodash/pickBy';
 import { getAllOilSitesList } from '@/api/oils'
-import { getCurrentUserAllDrivesList } from '@/api/carOwner/users'
 import BigNumber from 'bignumber.js';
 
 @Component({
@@ -91,13 +102,21 @@ export default class Gas extends Vue {
 
   private oilvalue: string = '';
 
-  private dirverValue: string = '';
-
   private gasRecord: any = [];
 
   private nowDate: Date = new Date();
 
   private activeName: string[] = [];
+
+  private valueKey: string = '';
+
+  private onConfirm() {
+    this.serachObj = {
+      isWhole: true,
+      ...this.serachObj,
+    }
+    this.getAllOilSitesList();
+  };
 
   private currentDate: Date = dayjs().toDate();
 
@@ -106,8 +125,6 @@ export default class Gas extends Vue {
   private maxDate: Date = dayjs().toDate();
 
   private oilList: any = [];
-
-  private dirversList: any = [];
 
   get oilOption() {
     return [
@@ -132,23 +149,9 @@ export default class Gas extends Vue {
     return '';
   }
 
-  get drivesOption() {
-    return [
-      {
-        text: '车牌号',
-        value: ''
-      },
-      ...this.dirversList.map((item: any) => ({
-        text: item.carNo,
-        value: item._id
-      }))
-    ];
-  }
-
   private async created() {
     this.serachObj.isWhole = true;
     this.oilList = await getAllOilSitesList();
-    this.dirversList = await getCurrentUserAllDrivesList({isWhole: true});
   }
 
   private onLoad() {
@@ -156,7 +159,7 @@ export default class Gas extends Vue {
     this.getAllOilSitesList();
   }
 
-    private serachObj: any = {
+  private serachObj: any = {
     perPage: 10,
     queryPage: 1,
     oilName: '',
@@ -166,7 +169,11 @@ export default class Gas extends Vue {
   }
 
   get serachParams() {
-    return pickBy(this.serachObj);
+    let obj: any = pickBy(this.serachObj);
+    if (this.valueKey) {
+      obj.valueKey = this.valueKey
+    }
+    return obj;
   }
 
   private confirm(date: Date) {
@@ -261,22 +268,6 @@ export default class Gas extends Vue {
     this.getAllOilSitesList();
   }
 
-  private dirverChange(value: any) {
-    let serachObj = this.dirversList.find((item: any) => item._id === value) || {};
-    if(serachObj) {
-      serachObj = {
-        carNo: serachObj.carNo,
-        userId: serachObj._id,
-      }
-    };
-    this.serachObj = {
-      ...this.serachObj,
-      ...serachObj,
-      isWhole: true,
-    }
-    this.getAllOilSitesList();
-  }
-
 }
 
 </script>
@@ -329,4 +320,7 @@ export default class Gas extends Vue {
 
 .gas-oil-num
   color #f00
+
+.field
+  height 50px
 </style>
