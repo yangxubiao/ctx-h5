@@ -14,7 +14,7 @@
       <van-cell class="cell-item" title="加油点信息" is-link @click="jumpPage('driverGasInfo')" />
       <van-cell class="cell-item"   title="修改密码" is-link @click="jumpPage('password')" />
     </div>
-    <!-- <LoginOut /> -->
+    <LoginOut />
   </div>
 </template>
 
