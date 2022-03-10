@@ -26,7 +26,7 @@
     placeholder="请输入加油升数"
     :rules="[{ required: true, message: '请输入加油升数' }]"
   />
-  <van-field 
+  <!-- <van-field 
     name="uploader" 
     label="加油图片"
     class="field"
@@ -34,7 +34,7 @@
   <template #input>
     <van-uploader max-count='1' v-model="uploader" :after-read="afterRead"/>
   </template>
-</van-field>
+</van-field> -->
   <van-popup v-model="showPicker" position="bottom">
     <van-picker
       show-toolbar
@@ -47,7 +47,7 @@
   <div style="margin: 16px;">
     <van-button round block type="info" native-type="submit">提交</van-button>
   </div>
-  <JumpToPageVue :pageInfo="pageInfo"/>
+  <JumpToPageVue class="bottom-jump" :pageInfo="pageInfo"/>
 </van-form>
   </div>
 </template>
@@ -65,10 +65,10 @@ import JumpToPageVue from '@/components/jumpToPage.vue'
 import { getUserById, updateUser } from '@/api/users'
 import Loading from '@/components/loading.vue';
 import BigNumber from 'bignumber.js';
-import { getLocalData } from '@/utils/local';
 import tween from '@/utils/tween';
 import { stringToNumber } from '@/utils/string';
 import { queryCarOwnerGasInfo } from '@/api/carOwner/summary'
+import { getLocalData } from '@/utils/local';
 
 @Component({
   components: {
@@ -236,15 +236,18 @@ export default class GasVue extends Vue {
   }
 
   private async created() {
-    const userInfo = getLocalData('userInfo');
-    if(userInfo.gasMode === 'divide') {
-      this.handleDivideMode(new BigNumber(userInfo.availableLum).toNumber());
+    let result: any = getLocalData('userInfo');
+    if (!(this.$route.query?.from === 'login')) {
+      result = await getCurrentUser();
+    }
+    if(result.gasMode === 'divide') {
+      this.handleDivideMode(new BigNumber(result.availableLum).toNumber());
     } else {
       const gasInfo: any = await queryCarOwnerGasInfo({
         isEncrypt: true,
         jsonObject: {
-          carId: userInfo.carId,
-          carName: userInfo.carName,
+          carId: result.carId,
+          carName: result.carName,
         }
       });
       // 动画开始
@@ -256,7 +259,6 @@ export default class GasVue extends Vue {
       this.formObj.oilId = gasInfo.gasId;
       this.formObj.oilProxyFee = gasInfo.gasProxyFee;
     }
-    const result: any = await getCurrentUser();
     this.userInfo = result;
     this.formObj.carNo = result.carNo;
     this.formObj.carName = result.carName;
@@ -287,6 +289,9 @@ export default class GasVue extends Vue {
   font-size 40px
   color #fff
   margin-bottom 30px
+
+.bottom-jump
+  margin-top 120px
 </style>
 <style lang='stylus'>
 .oil-text

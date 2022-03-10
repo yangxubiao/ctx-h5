@@ -29,7 +29,7 @@
 import {
 Vue,  Component,
 } from 'vue-property-decorator';
-import { getCurrentLoginederRechargesList } from '@/api/recharges'
+// import { getCurrentLoginederRechargesList } from '@/api/recharges'
 import { queryCarOwnerGasInfo } from '@/api/carOwner/summary'
 import tween from '@/utils/tween';
 import { stringToNumber } from '@/utils/string';
@@ -91,7 +91,7 @@ export default class CarOwnIndex extends Vue {
   }
 
   private created() {
-    getCurrentLoginederRechargesList();
+    // getCurrentLoginederRechargesList();
   }
 
   private async mounted() {

@@ -35,6 +35,7 @@
                   {{gasItem.oilLnum + '升'}}
                 </div>
                 <div class="edit-gas-record" @click="editGasRecord(gasItem)">编辑</div>
+                <!-- <van-button square type="danger" text="删除" @click="delOilRecord(gasItem)" />  -->
               </div>
             </template>
                 <van-field label="车队名称" :value="gasItem.carName" readonly />
@@ -86,7 +87,7 @@
 import {
 Vue,  Component,
 } from 'vue-property-decorator';
-import { getAllGasRecords } from '@/api/oils'
+import { getAllGasRecords, delOilRecord } from '@/api/oils'
 import dayjs from 'dayjs';
 import Loading from '@/components/loading.vue';
 import pickBy from 'lodash/pickBy';
@@ -182,6 +183,10 @@ export default class Gas extends Vue {
     carId: '',  // 车队Id
     oilName: '',
     oilId: '',
+  }
+
+  private delOilRecord(gasItem: any) {
+    delOilRecord(gasItem._id)
   }
 
   get serachParams() {

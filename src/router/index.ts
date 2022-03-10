@@ -21,7 +21,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/login',
     name: 'login',
-    component: () => import(/* webpackChunkName: "login" */ '@/views/login.vue'),
+    component: () => import(/* webpackChunkName: "home" */ '@/views/login.vue'),
     meta: {
       title: '车行通',
     },
@@ -29,7 +29,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/password',
     name: 'password',
-    component: () => import(/* webpackChunkName: "password" */ '@/views/password.vue'),
+    component: () => import(/* webpackChunkName: "home" */ '@/views/password.vue'),
     meta: {
       title: '车行通',
     },

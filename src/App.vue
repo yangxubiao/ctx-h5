@@ -28,8 +28,12 @@ export default class App extends Vue {
 </script>
 <style scoped lang="stylus">
 #app
-  background-image url('./assets/img/bg.jpeg')
+  background-color #000
   background-size 100% 100%
   width 100%
   height 100%
+
+.tabbar
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
 </style>

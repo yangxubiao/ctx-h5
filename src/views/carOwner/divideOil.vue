@@ -3,7 +3,6 @@
   <Loading v-if="loading" />
   <div v-else class="wrapper">
     <van-dropdown-menu>
-      <van-dropdown-item @change="dirverChange" v-model="dirverValue" :options="drivesOption" :key="1" />
       <van-dropdown-item @change="divideChange" v-model="divideValue" :options="divideOption" :key="2" />
     </van-dropdown-menu>
     <div class="form-date"  @click="toggleDate">
@@ -11,6 +10,19 @@
         <span>{{timeFormat(nowDate, 'YYYY年MM月')}}</span>
         <van-icon name="arrow-down" />
       </div>
+    </div>
+    <div>
+        <van-field
+          v-model="valueKey"
+          center
+          class="field"
+          clearable
+          placeholder="请输入关键字"
+        >
+        <template #button>
+          <van-button  @click="onConfirm" type="danger">搜索</van-button>
+        </template>
+      </van-field>
     </div>
     <van-list
       v-model="gasLoading"
@@ -23,7 +35,15 @@
         v-for="(gasItem, gasIndex) in gasRecord"
         :key="gasIndex"
       >
-        <van-cell :title="gasItem.carNo" :value="lnumText(gasItem)" :label="timeFormat(gasItem.createdAt, 'YYYY-MM-DD HH:mm:ss')"/>
+        <van-cell :title="gasItem.carNo"  :label="timeFormat(gasItem.createdAt, 'YYYY-MM-DD HH:mm:ss')">
+            
+            <div v-if="gasItem.mode === 'div'" class="up-lnum">
+              {{lnumText(gasItem)}}
+            </div>
+            <div v-else class="down-lnum">
+              {{lnumText(gasItem)}}
+            </div>
+        </van-cell>
       </van-swipe-cell>
     </van-list>
   <van-popup
@@ -51,7 +71,6 @@ Vue,  Component,
 import dayjs from 'dayjs';
 import Loading from '@/components/loading.vue';
 import pickBy from 'lodash/pickBy';
-import { getCurrentUserAllDrivesList } from '@/api/carOwner/users'
 import { getOilDivideRecord } from '@/api/carOwner/oilDivideRecord';
 import { getLocalData } from '@/utils/local';
 import BigNumber from 'bignumber.js';
@@ -67,13 +86,13 @@ export default class Gas extends Vue {
 
   private isShowDate: boolean = false;
 
+  private valueKey: string = '';
+
   private gasLoading: boolean = false;
 
   private gasFinished: boolean = false;
 
   private divideValue: string = '';
-
-  private dirverValue: string = '';
 
   private gasRecord: any = [];
 
@@ -88,8 +107,6 @@ export default class Gas extends Vue {
   private maxDate: Date = dayjs().toDate();
 
   private oilList: any = [];
-
-  private dirversList: any = [];
 
   private lnumText(gasItem: any) {
     return ((gasItem.mode === 'div' ? '+' : '-') + new BigNumber(gasItem.lum).toFixed(2).toString() + '升');
@@ -112,23 +129,6 @@ export default class Gas extends Vue {
     ];
   }
 
-  get drivesOption() {
-    return [
-      {
-        text: '车牌号',
-        value: ''
-      },
-      ...this.dirversList.map((item: any) => ({
-        text: item.carNo,
-        value: item._id
-      }))
-    ];
-  }
-
-  private async created() {
-    this.dirversList = await getCurrentUserAllDrivesList({gasMode: 'divide'});
-  }
-
   private onLoad() {
     this.serachObj.queryPage+=1;
     this.getOilDivideRecord();
@@ -141,8 +141,21 @@ export default class Gas extends Vue {
     carNo: '', // 车牌号
   }
 
+  private onConfirm() {
+    this.serachObj = {
+      ...this.serachObj,
+      perPage: 10,
+      queryPage: 1,
+    }
+    this.getOilDivideRecord();
+  };
+
   get serachParams() {
-    return pickBy(this.serachObj);
+    let obj: any = pickBy(this.serachObj);
+    if (this.valueKey) {
+      obj.valueKey = this.valueKey
+    }
+    return obj;
   }
 
   private confirm(date: Date) {
@@ -206,21 +219,6 @@ export default class Gas extends Vue {
     this.getOilDivideRecord();
   }
 
-  private dirverChange(value: any) {
-    let serachObj = this.dirversList.find((item: any) => item._id === value) || {};
-    if(serachObj) {
-      serachObj = {
-        carNo: serachObj.carNo,
-      }
-    };
-    this.serachObj.queryPage = 1
-    this.serachObj = {
-      ...this.serachObj,
-      ...serachObj,
-    }
-    this.getOilDivideRecord();
-  }
-
 }
 
 </script>
@@ -256,4 +254,13 @@ export default class Gas extends Vue {
   font-size 18px
   background-color #fff
   color #323233
+
+.field
+  height 50px
+
+.up-lnum
+  color #ee0d23
+
+.down-lnum
+  color #090
 </style>

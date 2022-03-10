@@ -120,14 +120,8 @@ export default class CarOilDivideManage extends Vue {
   }
   private valueKey: string = '';
 
-  private option: any = [
-        { text: '全部商品', value: 0 },
-        { text: '新款商品', value: 1 },
-        { text: '活动商品', value: 2 },
-  ];
-
   private onConfirm() {
-      this.getUsersByCondition();
+    this.getUsersByCondition();
   };
   // 额度值
   private ableUseValue: string = '0'

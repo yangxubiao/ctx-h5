@@ -77,7 +77,10 @@ export default class Login extends Vue {
     if (this.$route?.query?.toPage) {
       this.$router.replace({
         name: (this.$route.query.toPage as string),
-        query: this.$route.query
+        query: {
+          ...this.$route.query,
+          from: 'login'
+        }
       });
     } else {
       this.$router.replace({path: '/'});

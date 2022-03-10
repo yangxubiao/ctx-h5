@@ -6,7 +6,7 @@ export const adminRoutes: RouteCustom[] = [
   {
     path: '/admin',
     name: 'admin',
-    component: () => import(/* webpackChunkName: "adminIndex" */ '@/views/admin/index.vue'),
+    component: () => import(/* webpackChunkName: "admin" */ '@/views/admin/index.vue'),
     meta: {
       title: '车行通',
     },
@@ -14,7 +14,7 @@ export const adminRoutes: RouteCustom[] = [
   {
     path: '/admin-car-owners',
     name: 'adminCarOwners',
-    component: () => import(/* webpackChunkName: "adminCarOwners" */ '@/views/admin/adminCarOwners.vue'),
+    component: () => import(/* webpackChunkName: "admin" */ '@/views/admin/adminCarOwners.vue'),
     meta: {
       title: '车行通',
     },
@@ -22,7 +22,7 @@ export const adminRoutes: RouteCustom[] = [
   {
     path: '/admin-add-car-owner',
     name: 'adminAddCarOwner',
-    component: () => import(/* webpackChunkName: "adminAddCarOwner" */ '@/views/admin/adminAddCarOwner.vue'),
+    component: () => import(/* webpackChunkName: "admin" */ '@/views/admin/adminAddCarOwner.vue'),
     meta: {
       title: '车行通',
     },
@@ -30,7 +30,7 @@ export const adminRoutes: RouteCustom[] = [
   {
     path: '/admin-oil-quantity-monitor',
     name: 'adminOilQuantityMonitor',
-    component: () => import(/* webpackChunkName: "adminOilQuantityMonitor" */ '@/views/admin/adminOilQuantityMonitor.vue'),
+    component: () => import(/* webpackChunkName: "admin" */ '@/views/admin/adminOilQuantityMonitor.vue'),
     meta: {
       title: '车行通',
     },
@@ -38,7 +38,7 @@ export const adminRoutes: RouteCustom[] = [
   {
     path: '/admin-oil',
     name: 'adminOil',
-    component: () => import(/* webpackChunkName: "adminOil" */ '@/views/admin/adminOil.vue'),
+    component: () => import(/* webpackChunkName: "admin" */ '@/views/admin/adminOil.vue'),
     meta: {
       title: '车行通',
     },
@@ -46,7 +46,7 @@ export const adminRoutes: RouteCustom[] = [
   {
     path: '/admin-recharge',
     name: 'adminRecharge',
-    component: () => import(/* webpackChunkName: "adminRecharge" */ '@/views/admin/adminRecharge.vue'),
+    component: () => import(/* webpackChunkName: "admin" */ '@/views/admin/adminRecharge.vue'),
     meta: {
       title: '车行通',
     },
@@ -54,7 +54,7 @@ export const adminRoutes: RouteCustom[] = [
   {
     path: '/admin-manage-recharge',
     name: 'adminManageRecharge',
-    component: () => import(/* webpackChunkName: "adminManageRecharge" */ '@/views/admin/adminManageRecharge.vue'),
+    component: () => import(/* webpackChunkName: "admin" */ '@/views/admin/adminManageRecharge.vue'),
     meta: {
       title: '车行通',
     },
@@ -62,7 +62,7 @@ export const adminRoutes: RouteCustom[] = [
   {
     path: '/admin-oil-clean',
     name: 'adminOilClean',
-    component: () => import(/* webpackChunkName: "oilClean" */ '@/views/admin/oilClean.vue'),
+    component: () => import(/* webpackChunkName: "admin" */ '@/views/admin/oilClean.vue'),
     meta: {
       title: '车行通',
     },
@@ -70,7 +70,7 @@ export const adminRoutes: RouteCustom[] = [
   {
     path: '/admin-oil-clean-manage',
     name: 'adminOilCleanManage',
-    component: () => import(/* webpackChunkName: "oilCleanManage" */ '@/views/admin/oilCleanManage.vue'),
+    component: () => import(/* webpackChunkName: "admin" */ '@/views/admin/oilCleanManage.vue'),
     meta: {
       title: '车行通',
     },
@@ -78,7 +78,7 @@ export const adminRoutes: RouteCustom[] = [
   {
     path: '/admin-add-oil',
     name: 'adminAddOil',
-    component: () => import(/* webpackChunkName: "adminAddOil" */ '@/views/admin/adminAddOil.vue'),
+    component: () => import(/* webpackChunkName: "admin" */ '@/views/admin/adminAddOil.vue'),
     meta: {
       title: '车行通',
     },
@@ -86,7 +86,7 @@ export const adminRoutes: RouteCustom[] = [
   {
     path: '/admin-gas',
     name: 'adminGas',
-    component: () => import(/* webpackChunkName: "adminGas" */ '@/views/admin/gas.vue'),
+    component: () => import(/* webpackChunkName: "admin" */ '@/views/admin/gas.vue'),
     meta: {
       title: '车行通',
     },
@@ -94,7 +94,7 @@ export const adminRoutes: RouteCustom[] = [
   {
     path: '/admin-gas-manage',
     name: 'adminGasManage',
-    component: () => import(/* webpackChunkName: "adminGasManage" */ '@/views/admin/adminGasManage.vue'),
+    component: () => import(/* webpackChunkName: "admin" */ '@/views/admin/adminGasManage.vue'),
     meta: {
       title: '车行通',
     },
@@ -102,7 +102,7 @@ export const adminRoutes: RouteCustom[] = [
   {
     path: '/admin-users',
     name: 'adminUsers',
-    component: () => import(/* webpackChunkName: "adminUsers" */ '@/views/admin/adminUsers.vue'),
+    component: () => import(/* webpackChunkName: "admin" */ '@/views/admin/adminUsers.vue'),
     meta: {
       title: '车行通',
     },
@@ -110,7 +110,7 @@ export const adminRoutes: RouteCustom[] = [
   {
     path: '/admin-manage-users',
     name: 'adminManageUsers',
-    component: () => import(/* webpackChunkName: "adminManageUsers" */ '@/views/admin/adminManageUsers.vue'),
+    component: () => import(/* webpackChunkName: "admin" */ '@/views/admin/adminManageUsers.vue'),
     meta: {
       title: '车行通',
     },
