@@ -29,6 +29,7 @@ import { stringToNumber } from '@/utils/string';
 import { BigNumber } from 'bignumber.js';
 import LoginOut from '@/components/loginOut.vue'
 import { getLocalData } from '@/utils/local';
+import { getCurrentUser } from '@/api/carOwner/users';
 
 @Component({
   components: {
@@ -82,14 +83,9 @@ export default class DriverIndex extends Vue {
   }
 
   private async mounted() {
-    // const userInfo = getLocalData('userInfo');
-    // if(userInfo.gasMode === 'divide') {
-    //   this.handleDivideMode(new BigNumber(userInfo.availableLum).toNumber());
-    // } else {
-    //   this.getCurrentLoginGasRecord();
-    // }
-    const userInfo = getLocalData('userInfo');
+    let userInfo = getLocalData('userInfo');
     if(userInfo.gasMode === 'divide') {
+      userInfo = await getCurrentUser();
       this.handleDivideMode(new BigNumber(userInfo.availableLum).toNumber());
     } else {
       const gasInfo: any = await queryCarOwnerGasInfo({

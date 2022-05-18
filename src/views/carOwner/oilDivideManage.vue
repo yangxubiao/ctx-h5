@@ -212,7 +212,7 @@ export default class CarOilDivideManage extends Vue {
     }
   }
 
-  private dialogConfirm() {
+  private async dialogConfirm() {
     if (!this.lnum) {
       this.$toast(`请输入${this.dialogInfo.title}升数`)
       return;
@@ -222,6 +222,8 @@ export default class CarOilDivideManage extends Vue {
       this.$toast(`${this.dialogInfo.title}升数不能小于0`)
       return;
     }
+
+    await this.getUsersByCondition();
 
     if (this.oilFlag !== 'div') {
       // 处理分油
