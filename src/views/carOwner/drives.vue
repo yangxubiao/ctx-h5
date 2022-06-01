@@ -15,8 +15,13 @@
         v-for="(userItem, userIndex) in usersList"
         :key="userIndex"
       >
-        <van-cell :title="userItem.name">
-          <a :href="'tel:'+userItem.phone">{{ userItem.phone }}</a>
+        <van-cell :title="userItem.name" :label="userItem.carNo">
+          <div class="extra-info">
+              <a :href="'tel:'+userItem.phone">{{ userItem.phone }}</a>
+              <span class="gas-mode-class">
+                {{userItem.gasModeName}}
+              </span>
+          </div>
         </van-cell>
         <template #right>
           <van-button square type="danger" text="删除" @click="delUserItemById(userItem)" />
@@ -185,4 +190,13 @@ export default class adminCarOwners extends Vue {
 
 .add-user
   color #00f
+
+.extra-info
+  display flex
+  flex-direction column
+
+.gas-mode-class
+  margin-top 4px
+  color #969799
+  font-size:16px
 </style>
