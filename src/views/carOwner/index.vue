@@ -21,7 +21,7 @@
       <van-cell class="divide-oil" title="分油记录" is-link @click="jumpPage('carDivideOil')" />
       <van-cell class="updata-password" title="修改密码" is-link @click="jumpPage('password')" />
     </div>
-      <LoginOut />
+      <LoginOut class="login-out" />
   </div>
 </template>
 
@@ -136,4 +136,8 @@ export default class CarOwnIndex extends Vue {
 
 .divide-oil
   margin-bottom 50px
+
+.login-out
+  position relative
+  top -20px
 </style>

@@ -4,6 +4,7 @@
     <van-tabbar v-if="isNotShowTabbar" v-model="active" class="tabbar">
       <van-tabbar-item   to="/" icon="home-o">首页</van-tabbar-item>
     </van-tabbar>
+    <Footer />
   </div>
 </template>
 
@@ -13,7 +14,13 @@ import {
   Component,
   Watch
 } from 'vue-property-decorator';
-@Component
+import Footer from './components/footer.vue';
+
+@Component({
+  components: {
+    Footer,
+  }
+})
 export default class App extends Vue {
 
   private active: number = 0;
