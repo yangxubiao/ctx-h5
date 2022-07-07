@@ -2,6 +2,7 @@
   <div class="wrapper">
     请截图保存，使用微信扫一扫即可加油
     <img class="applet-qr" src="../../assets/img/appletQr.jpeg" alt="">
+    <JumpToPageVue class="bottom-jump" :pageInfo="pageInfo"/>
   </div>
 </template>
 
@@ -9,9 +10,20 @@
 import {
 Vue,  Component,
 } from 'vue-property-decorator';
+import JumpToPageVue from '@/components/jumpToPage.vue'
 
-@Component
+@Component({
+    components: {
+    JumpToPageVue,
+  }
+})
 export default class GasVue extends Vue {
+    get pageInfo() {
+    return {
+      name: 'driverGas',
+      title: '加油记录'
+    }
+  }
 }
 </script>
 <style lang='stylus' scoped>
@@ -31,4 +43,9 @@ export default class GasVue extends Vue {
   width 240px
   height 440px
   margin-top 10px
+
+.bottom-jump
+  width 690px
+  position relative
+  top -40px
 </style>
